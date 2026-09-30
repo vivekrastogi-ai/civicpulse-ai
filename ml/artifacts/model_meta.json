@@ -1,0 +1,62 @@
+{
+  "model_version": "v1-synthetic",
+  "data": "SYNTHETIC incidents - metrics real-world accuracy nahi dikhate",
+  "features": [
+    "rain_mm",
+    "rain_max_1h",
+    "rain_prev1d",
+    "rain_prev3d",
+    "rain_prev7d",
+    "rain_prev30d",
+    "temp_mean",
+    "humidity_mean",
+    "wind_mean",
+    "lat",
+    "lon",
+    "elevation",
+    "local_relief",
+    "road_length_km",
+    "drain_length_km",
+    "tunnel_length_km",
+    "underpass_count",
+    "dist_waterway_km",
+    "inc_last30d",
+    "inc_past_years",
+    "month",
+    "dayofyear"
+  ],
+  "low_threshold": 0.008677542209625244,
+  "high_threshold": 0.0881696417927742,
+  "test_metrics": [
+    {
+      "model": "LogisticRegression",
+      "pr_auc": 0.1564,
+      "roc_auc": 0.9326,
+      "brier": 0.1773,
+      "threshold": 0.9887,
+      "precision": 0.189,
+      "recall": 0.4082,
+      "f1": 0.2584
+    },
+    {
+      "model": "XGBoost (raw)",
+      "pr_auc": 0.186,
+      "roc_auc": 0.9385,
+      "brier": 0.00688,
+      "threshold": 0.1184,
+      "precision": 0.2112,
+      "recall": 0.3477,
+      "f1": 0.2628
+    },
+    {
+      "model": "XGBoost (calibrated)",
+      "pr_auc": 0.1696,
+      "roc_auc": 0.9382,
+      "brier": 0.00701,
+      "threshold": 0.0882,
+      "precision": 0.2171,
+      "recall": 0.3249,
+      "f1": 0.2602
+    }
+  ]
+}
