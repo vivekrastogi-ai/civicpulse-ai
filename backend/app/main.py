@@ -63,6 +63,8 @@ def predict(cell_id: int, date: str):
     out.update(cell_id=cell_id, date=date,
                disclaimer="Model estimate hai, verified observation nahi. Synthetic data par trained prototype.")
     return out
+
+
 @app.get("/api/v1/risk-map")
 def risk_map(date: str):
     """Ek din ke saare cells ka risk (map ke liye)."""
@@ -70,7 +72,14 @@ def risk_map(date: str):
     day = df[df["date"] == pd.Timestamp(date)]
     if day.empty:
         raise HTTPException(404, "Is date ka data nahi mila (2024-06-01 se 2024-09-30).")
-    prob, level = get_model().predict(day)
+    prob, _ = get_model().predict(day)
+
+    # Map ke liye relative level: us din ke top 3% High, agle 15% Medium
+    hi_cut = np.quantile(prob, 0.97)
+    med_cut = np.quantile(prob, 0.82)
+    level = np.where(prob >= hi_cut, "High",
+             np.where(prob >= med_cut, "Medium", "Low"))
+
     out = pd.DataFrame({
         "cell_id": day["cell_id"].values,
         "lat": day["lat"].values,
@@ -80,4 +89,9 @@ def risk_map(date: str):
         "rain_mm": day["rain_mm"].values,
     })
     summary = out["risk_level"].value_counts().to_dict()
-    return {"date": date, "summary": summary, "cells": out.to_dict(orient="records")}
+    return {
+        "date": date,
+        "summary": summary,
+        "note": "Map levels us din ke cells ke beech relative hain; probability absolute hai.",
+        "cells": out.to_dict(orient="records"),
+    }
