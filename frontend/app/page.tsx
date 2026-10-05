@@ -20,6 +20,15 @@ type Explanation = {
   disclaimer: string;
 };
 
+type Simulation = {
+  original_rain_mm: number;
+  scenario_rain_mm: number;
+  original_probability: number;
+  scenario_probability: number;
+  scenario_level: string;
+  disclaimer: string;
+};
+
 export default function Home() {
   const [date, setDate] = useState("2024-09-13");
   const [cells, setCells] = useState<Cell[]>([]);
@@ -28,6 +37,8 @@ export default function Home() {
   const [expl, setExpl] = useState<Explanation | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mult, setMult] = useState(1);
+  const [sim, setSim] = useState<Simulation | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -54,6 +65,29 @@ export default function Home() {
       .then(setExpl)
       .catch(() => setExpl(null));
   }, [selected, date]);
+
+    useEffect(() => {
+    setMult(1);
+    setSim(null);
+  }, [selected, date]);
+
+  useEffect(() => {
+    if (selected === null || mult === 1) {
+      setSim(null);
+      return;
+    }
+    const t = setTimeout(() => {
+      fetch(`${API}/api/v1/simulations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cell_id: selected, date, rain_multiplier: mult }),
+      })
+        .then((r) => r.json())
+        .then(setSim)
+        .catch(() => setSim(null));
+    }, 300);
+    return () => clearTimeout(t);
+  }, [mult, selected, date]);
 
   return (
     <div className="flex h-screen flex-col bg-gray-100 text-gray-900">
@@ -105,7 +139,38 @@ export default function Home() {
                   {expl.risk_level} risk
                 </div>
               </div>
+                            <div className="rounded border border-blue-200 bg-blue-50 p-3 text-sm">
+                <div className="font-semibold">What-if: barish badlo</div>
+                <input
+                  type="range"
+                  min={0}
+                  max={3}
+                  step={0.25}
+                  value={mult}
+                  onChange={(e) => setMult(parseFloat(e.target.value))}
+                  className="my-2 w-full"
+                />
+                <div>Barish: {mult}x</div>
+                {sim ? (
+                  <div className="mt-2 space-y-1">
+                    <div>
+                      Barish: {sim.original_rain_mm.toFixed(1)} mm →{" "}
+                      <b>{sim.scenario_rain_mm.toFixed(1)} mm</b>
+                    </div>
+                    <div>
+                      Risk: {(sim.original_probability * 100).toFixed(1)}% →{" "}
+                      <b>{(sim.scenario_probability * 100).toFixed(1)}%</b>
+                    </div>
+                    <p className="text-xs text-gray-500">{sim.disclaimer}</p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-500">
+                    Slider hilao, naya risk yahan dikhega.
+                  </p>
+                )}
+              </div>
               <h3 className="text-sm font-semibold">Mukhya wajah</h3>
+              
               <ul className="space-y-2 text-sm">
                 {expl.top_factors.map((f) => (
                   <li key={f.label} className="rounded bg-gray-50 p-2">

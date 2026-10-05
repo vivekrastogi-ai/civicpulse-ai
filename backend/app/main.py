@@ -1,9 +1,12 @@
 import os
 import sys
 from functools import lru_cache
+
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 # ml/evaluation/explain.py import karne ke liye
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -12,14 +15,15 @@ from explain import RiskModel  # noqa: E402
 
 TABLE_PATH = os.path.join(ROOT, "ml", "data", "processed", "training_table.parquet")
 
+RAIN_FEATURES = ["rain_mm", "rain_max_1h", "rain_prev1d",
+                 "rain_prev3d", "rain_prev7d", "rain_prev30d"]
+
 app = FastAPI(
     title="CivicPulse AI",
     description="Delhi waterlogging risk prediction (prototype, SYNTHETIC data par trained). "
                 "Emergency warning system nahi hai.",
     version="0.1.0",
 )
-
-from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,6 +42,11 @@ def get_model() -> RiskModel:
 def get_table() -> pd.DataFrame:
     df = pd.read_parquet(TABLE_PATH)
     return df[df["year"] == 2024].reset_index(drop=True)   # demo ke liye 2024
+
+
+@app.get("/")
+def root():
+    return {"app": "CivicPulse AI", "docs": "/docs", "health": "/health"}
 
 
 @app.get("/health")
@@ -78,7 +87,7 @@ def risk_map(date: str):
     hi_cut = np.quantile(prob, 0.97)
     med_cut = np.quantile(prob, 0.82)
     level = np.where(prob >= hi_cut, "High",
-             np.where(prob >= med_cut, "Medium", "Low"))
+                     np.where(prob >= med_cut, "Medium", "Low"))
 
     out = pd.DataFrame({
         "cell_id": day["cell_id"].values,
@@ -94,4 +103,44 @@ def risk_map(date: str):
         "summary": summary,
         "note": "Map levels us din ke cells ke beech relative hain; probability absolute hai.",
         "cells": out.to_dict(orient="records"),
+    }
+
+
+class SimulationRequest(BaseModel):
+    cell_id: int
+    date: str
+    rain_multiplier: float = 1.0
+
+
+@app.post("/api/v1/simulations")
+def simulate(req: SimulationRequest):
+    """What-if: barish ko scale karke risk dobara nikalo."""
+    if not 0 <= req.rain_multiplier <= 3:
+        raise HTTPException(400, "rain_multiplier 0 se 3 ke beech hona chahiye.")
+    df = get_table()
+    row = df[(df["cell_id"] == req.cell_id) & (df["date"] == pd.Timestamp(req.date))]
+    if row.empty:
+        raise HTTPException(404, "Is cell/date ka data nahi mila.")
+
+    model = get_model()
+    base_prob, _ = model.predict(row)
+
+    scenario = row.copy()
+    for col in RAIN_FEATURES:
+        scenario[col] = scenario[col] * req.rain_multiplier
+    sim_prob, _ = model.predict(scenario)
+    out = model.explain(scenario)
+
+    return {
+        "cell_id": req.cell_id,
+        "date": req.date,
+        "rain_multiplier": req.rain_multiplier,
+        "original_rain_mm": float(row["rain_mm"].iloc[0]),
+        "scenario_rain_mm": float(scenario["rain_mm"].iloc[0]),
+        "original_probability": round(float(base_prob[0]), 5),
+        "scenario_probability": round(float(sim_prob[0]), 5),
+        "scenario_level": out["risk_level"],
+        "top_factors": out["top_factors"],
+        "disclaimer": "What-if model ka estimate hai (synthetic data par trained). "
+                      "Training range se bahar ki barish par bharosa kam hai.",
     }

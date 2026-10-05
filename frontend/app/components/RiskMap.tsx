@@ -35,7 +35,7 @@ export default function RiskMap({
   return (
     <MapContainer
       center={[28.64, 77.12]}
-      zoom={10}
+      zoom={11}
       style={{ height: "100%", width: "100%" }}
       preferCanvas
     >
