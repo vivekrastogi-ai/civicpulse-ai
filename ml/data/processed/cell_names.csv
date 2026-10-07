@@ -1,0 +1,1622 @@
+cell_id,place_name,dist_m
+0,Dhansa,2366.0
+1,Dhansa,2240.0
+2,Issapur,2291.0
+3,Issapur,2050.0
+4,Issapur,2271.0
+5,Dhansa,1462.0
+6,Dhansa,1248.0
+7,Issapur,1466.0
+8,Issapur,1050.0
+9,Issapur,1434.0
+10,Dhansa,1805.0
+11,Dhansa,823.0
+12,Dhansa,312.0
+13,Issapur,1024.0
+14,Issapur,55.0
+15,Issapur,978.0
+16,Bakkargarh,1211.0
+17,Ghalibpur,933.0
+18,Ghalibpur,596.0
+19,Sarangpur,1264.0
+20,Dhansa,1103.0
+21,Dhansa,798.0
+22,Issapur,1396.0
+23,Kazipur,791.0
+24,Kazipur,1088.0
+25,Bakkargarh,287.0
+26,Bakkargarh,810.0
+27,Luksar,727.0
+28,Dauralla,1243.0
+29,Dauralla,1007.0
+30,Ghalibpur,883.0
+31,Ghalibpur,516.0
+32,Sarangpur,330.0
+33,Sarangpur,815.0
+34,Malikpur,1755.0
+35,Kazipur,1245.0
+36,Kazipur,327.0
+37,Kazipur,815.0
+38,Bakkargarh,835.0
+39,Bakkargarh,1127.0
+40,Mundhela Khurd,834.0
+41,Mundhela Khurd,630.0
+42,Mundhela Khurd,1448.0
+43,Dauralla,765.0
+44,Dauralla,236.0
+45,Raota,834.0
+46,Raota,1048.0
+47,Sarangpur,788.0
+48,Malikpur,642.0
+49,Malikpur,950.0
+50,Ujwa,1454.0
+51,Kazipur,1260.0
+52,Samaspur Khalsa,1249.0
+53,Bakkargarh,1820.0
+54,Mundhela Kalan,996.0
+55,Mundhela Kalan,47.0
+56,Mundhela Khurd,592.0
+57,Mundhela Khurd,1432.0
+58,Dauralla,1047.0
+59,Raota,372.0
+60,Raota,735.0
+61,Jhuljhuli,367.0
+62,Malikpur,484.0
+63,Daryapur,776.0
+64,Ujwa,555.0
+65,Samaspur Khalsa,625.0
+66,Samaspur Khalsa,441.0
+67,Rawata Mor,1197.0
+68,Rawata Mor,1060.0
+69,Mundhela Kalan,1047.0
+70,Kair,1223.0
+71,Kair,1264.0
+72,Raota,1783.0
+73,Raota,1258.0
+74,Ghumanhera,1089.0
+75,Jhuljhuli,1261.0
+76,Daryapur,638.0
+77,Daryapur,695.0
+78,Ujwa,708.0
+79,Ujwa,859.0
+80,Jaffarpur Kalan,786.0
+81,Jaffarpur Kalan,638.0
+82,Rawata Mor,346.0
+83,Rawata Mor,1346.0
+84,Kair,470.0
+85,Kair,567.0
+86,Dauralla,3116.0
+87,Ghumanhera,2264.0
+88,Ghumanhera,1265.0
+89,Ghumanhera,269.0
+90,Ghumanhera,739.0
+91,Daryapur,1513.0
+92,Kharkhari Round,1389.0
+93,Kharkhari Round,1385.0
+94,Khera Dabur,1357.0
+95,Jaffarpur Kalan,784.0
+96,Jaffarpur Kalan,636.0
+97,Rawata Mor,1056.0
+98,Rawata Mor,1676.0
+99,Kair,973.0
+100,Kair,1023.0
+101,Kair,1774.0
+102,Jharoda Kalan,2577.0
+103,Jharoda Kalan,2504.0
+104,Jharoda Kalan,2811.0
+105,Ghumanhera,2452.0
+106,Ghumanhera,1576.0
+107,Ghumanhera,979.0
+108,Ghumanhera,1197.0
+109,Hassanpur,824.0
+110,Kharkhari Round,585.0
+111,Kharkhari Round,575.0
+112,Khera Dabur,880.0
+113,Khera Dabur,126.0
+114,Surhera,421.0
+115,Surhera,588.0
+116,Mitraon,948.0
+117,Surakhpur,843.0
+118,Surakhpur,706.0
+119,Surakhpur,1512.0
+120,Jharoda Kalan,1635.0
+121,Jharoda Kalan,1518.0
+122,Jharoda Kalan,1983.0
+123,Jharoda Kalan,2750.0
+124,Qutubgarh,1924.0
+125,Qutubgarh,2137.0
+126,Jhatikra,2669.0
+127,Shikarpur,1969.0
+128,Shikarpur,1153.0
+129,Shikarpur,884.0
+130,Asalatpur Khawad,624.0
+131,Hassanpur,655.0
+132,Hassanpur,596.0
+133,Shri Hans Nagar,814.0
+134,Shri Hans Nagar,383.0
+135,Kharkhari Jatmal,500.0
+136,Surhera,1021.0
+137,Mitraon,607.0
+138,Mitraon,436.0
+139,Surakhpur,734.0
+140,Surakhpur,571.0
+141,Surakhpur,1454.0
+142,Jharoda Kalan,839.0
+143,Jharoda Kalan,578.0
+144,Jharoda Kalan,1401.0
+145,Tikri Kalan,2312.0
+146,Nizampur,1351.0
+147,Nizampur,1082.0
+148,Chatesar,1909.0
+149,Chatesar,1607.0
+150,Punjab Khor,1792.0
+151,Punjab Khor,1305.0
+152,Punjab Khor,1481.0
+153,Qutubgarh,1411.0
+154,Qutubgarh,926.0
+155,Qutubgarh,1312.0
+156,Mungeshpur,2132.0
+157,Jhatikra,2126.0
+158,Jhatikra,1257.0
+159,Shikarpur,787.0
+160,Shikarpur,269.0
+161,Asalatpur Khawad,533.0
+162,Daulatpur,312.0
+163,Pandwalan Khurd,822.0
+164,Pandwalan Kalan,502.0
+165,Shri Hans Nagar,743.0
+166,Kharkhari Nahar,357.0
+167,Kharkhari Nahar,981.0
+168,Tamil Sangam,473.0
+169,Shyam Enclave,392.0
+170,Sundar Nagar,439.0
+171,Naveen Place,815.0
+172,Naveen Place,1425.0
+173,Jharoda Kalan,858.0
+174,Jharoda Kalan,604.0
+175,Jharoda Kalan,1412.0
+176,Tikri Kalan,1477.0
+177,Tikri Kalan,1081.0
+178,Tikri Kalan,1467.0
+179,Nizampur,1829.0
+180,Nizampur,830.0
+181,Nizampur,186.0
+182,Garhi Rindhala,820.0
+183,Garhi Rindhala,1220.0
+184,Jaunti,997.0
+185,Chatesar,608.0
+186,Chatesar,1143.0
+187,Punjab Khor,378.0
+188,Punjab Khor,796.0
+189,Qutubgarh,1070.0
+190,Qutubgarh,102.0
+191,Qutubgarh,936.0
+192,Mungeshpur,1132.0
+193,Mungeshpur,1524.0
+194,Jhatikra,990.0
+195,Jhatikra,202.0
+196,Jhatikra,1049.0
+197,Daulatpur,1136.0
+198,Daulatpur,719.0
+199,Pandwalan Khurd,338.0
+200,Pandwalan Kalan,629.0
+201,Pandwalan Kalan,933.0
+202,Kharkhari Nahar,657.0
+203,Khaira,437.0
+204,Chetan Vihar,535.0
+205,Gopal Nagar,283.0
+206,Shri Krishna Colony,131.0
+207,Chandan Place,187.0
+208,Chandan Place,1179.0
+209,Dichaon Kalan,1603.0
+210,Jharoda Kalan,1548.0
+211,Neelwal,1092.0
+212,Tikri Kalan,1011.0
+213,Tikri Kalan,81.0
+214,Tikri Kalan,996.0
+215,Savda,1655.0
+216,Nizampur,1246.0
+217,Nizampur,948.0
+218,Garhi Rindhala,207.0
+219,Garhi Rindhala,927.0
+220,Jaunti,504.0
+221,Chatesar,394.0
+222,Chatesar,1045.0
+223,Punjab Khor,764.0
+224,Jat Khor,708.0
+225,Jat Khor,489.0
+226,Katewada,481.0
+227,Katewada,826.0
+228,Mungeshpur,133.0
+229,Mungeshpur,1029.0
+230,Nankheri,1312.0
+231,Nankheri,880.0
+232,Badusarai,901.0
+233,Badusarai,1292.0
+234,Kanganheri,1335.0
+235,Rewla Khanpur,1040.0
+236,Rewla Khanpur,499.0
+237,Rewla Khanpur,1190.0
+238,Paprawat,515.0
+239,Vetesta Enclave,404.0
+240,Prem Nagar,379.0
+241,Gopal Nagar Extension,363.0
+242,Indra Market,156.0
+243,Shiv Enclave,908.0
+244,Dichaon Kalan,557.0
+245,Dichaon Kalan,814.0
+246,Neelwal,1305.0
+247,Neelwal,308.0
+248,Neelwal,698.0
+249,Tikri Kalan,919.0
+250,Tikri Kalan,1353.0
+251,Savda,1118.0
+252,Savda,261.0
+253,Savda,941.0
+254,Garhi Rindhala,1189.0
+255,Garhi Rindhala,1493.0
+256,Jaunti,1230.0
+257,Jaunti,1241.0
+258,Chatesar,1697.0
+259,Salhapur,1674.0
+260,Jat Khor,927.0
+261,Jat Khor,772.0
+262,Katewada,665.0
+263,Katewada,945.0
+264,Mungeshpur,868.0
+265,Mungeshpur,1340.0
+266,Mungeshpur,2199.0
+267,Nankheri,981.0
+268,Nankheri,124.0
+269,Badusarai,124.0
+270,Kanganheri,840.0
+271,Kanganheri,387.0
+272,Rewla Khanpur,1048.0
+273,Rewla Khanpur,515.0
+274,Rewla Khanpur,1197.0
+275,Bhawani Nagar,727.0
+276,Durga Vihar II,62.0
+277,Nehru Garden,87.0
+278,Kamla Park,91.0
+279,Najafgarh Extension,40.0
+280,Shiv Enclave,605.0
+281,Dichaon Kalan,635.0
+282,Dichaon Kalan,870.0
+283,Neelwal,1614.0
+284,Neelwal,999.0
+285,Hiran Kudna,936.0
+286,Hiran Kudna,1462.0
+287,Ghevra,1026.0
+288,Ghevra,1231.0
+289,Savda,761.0
+290,Savda,1182.0
+291,Ladpur,1302.0
+292,Ladpur,608.0
+293,Ladpur,1021.0
+294,Chandpur,1701.0
+295,Salhapur,1015.0
+296,Salhapur,697.0
+297,Salhapur,1393.0
+298,Jat Khor,1719.0
+299,Bajitpur Thakran,964.0
+300,Bajitpur Thakran,872.0
+301,Auchandi,459.0
+302,Auchandi,822.0
+303,Harewali,1606.0
+304,Raghopur,1352.0
+305,Raghopur,859.0
+306,Badusarai,1104.0
+307,Kanganheri,1036.0
+308,Kanganheri,719.0
+309,Chhawla,943.0
+310,Chhawla,722.0
+311,Tajpur Khurd,1457.0
+312,Gandhi Park,588.0
+313,Shiv Vihar I,142.0
+314,Chander Mohalla,327.0
+315,Shanker Park,356.0
+316,Indra Park,495.0
+317,Deepak Vihar,1130.0
+318,Baprola,1488.0
+319,Baprola,1588.0
+320,Lok Nayak Puram,1501.0
+321,Hiran Kudna,872.0
+322,Hiran Kudna,150.0
+323,Hiran Kudna,1133.0
+324,Ghevra,268.0
+325,Ghevra,732.0
+326,Ghevra,1732.0
+327,Kanjhawala,1953.0
+328,Kanjhawala,992.0
+329,Kanjhawala,396.0
+330,Ladpur,934.0
+331,Chandpur,732.0
+332,Salhapur,844.0
+333,Salhapur,410.0
+334,Salhapur,1274.0
+335,Bajitpur Thakran,1602.0
+336,Bajitpur Thakran,630.0
+337,Bajitpur Thakran,476.0
+338,Auchandi,681.0
+339,Auchandi,964.0
+340,Harewali,624.0
+341,Harewali,1328.0
+342,Raghopur,1055.0
+343,Raghopur,149.0
+344,Raghopur,965.0
+345,Kanganheri,1854.0
+346,Sector 29,1592.0
+347,Chhawla,769.0
+348,Chhawla,472.0
+349,Tajpur Khurd,504.0
+350,Goyla Khurd,376.0
+351,Shyam Vihar II,632.0
+352,Shyam Vihar I,789.0
+353,Sainik Enclave,530.0
+354,Gemini Park,213.0
+355,Gemini Park,1187.0
+356,Baprola,565.0
+357,Baprola,792.0
+358,Lok Nayak Puram,901.0
+359,Lok Nayak Puram,253.0
+360,Hiran Kudna,1081.0
+361,Hiran Kudna,1559.0
+362,Ghevra,1045.0
+363,Rasulpur,1124.0
+364,Rasulpur,1051.0
+365,Madanpur Dabas,1517.0
+366,Kanjhawala,1101.0
+367,Kanjhawala,620.0
+368,Chandpur,793.0
+369,Chandpur,423.0
+370,Chandpur,1315.0
+371,Salhapur,1360.0
+372,Salhapur,1818.0
+373,Bajitpur Thakran,2008.0
+374,Bajitpur Thakran,1365.0
+375,Daryapur Kalan,621.0
+376,Daryapur Kalan,506.0
+377,Harewali,908.0
+378,Harewali,446.0
+379,Harewali,1254.0
+380,Raghopur,1143.0
+381,Raghopur,1489.0
+382,Sector 29,1213.0
+383,Sector 29,593.0
+384,Sector 29,1110.0
+385,Tajpur Khurd,1378.0
+386,Tajpur Khurd,621.0
+387,Sector 16D Dwarka,710.0
+388,Sector 16C,262.0
+389,Sector 16B Dwarka,299.0
+390,Kakrola,313.0
+391,Sector 16,612.0
+392,Nishat Park,1386.0
+393,Baprola,653.0
+394,Baprola,856.0
+395,JJ Colony,1061.0
+396,Bakkarwala,321.0
+397,Bakkarwala,682.0
+398,Mundka,1057.0
+399,Mundka,1479.0
+400,Rasulpur,581.0
+401,Rasulpur,422.0
+402,Madanpur Dabas,585.0
+403,Karala,1207.0
+404,Karala,1147.0
+405,Chandpur,1507.0
+406,Chandpur,1350.0
+407,Chandpur,1836.0
+408,Sultanpur Dabas,2023.0
+409,Bawana,2294.0
+410,Bawana,1480.0
+411,Bawana,1057.0
+412,Daryapur Kalan,1379.0
+413,Daryapur Kalan,1331.0
+414,Harewali,1623.0
+415,Harewali,1417.0
+416,Sector 28,1644.0
+417,Sector 28,807.0
+418,Sector 29,414.0
+419,Sector 24,949.0
+420,Sector 24,540.0
+421,Qutub Vihar,129.0
+422,Pocket A2,542.0
+423,Sector 17,165.0
+424,Sector 14,375.0
+425,Ambika Enclave,142.0
+426,Nishat Park,110.0
+427,Nishat Park,1057.0
+428,Tilangpur Kotla,1126.0
+429,Tilangpur Kotla,146.0
+430,Ranhola,709.0
+431,Ranhola,904.0
+432,Mundka,696.0
+433,Mundka,77.0
+434,Mundka,1017.0
+435,Rani Khera,957.0
+436,Rani Khera,771.0
+437,Madanpur Dabas,620.0
+438,Karala,543.0
+439,Karala,182.0
+440,Karala,1123.0
+441,Sultanpur Dabas,1602.0
+442,Sultanpur Dabas,961.0
+443,Sultanpur Dabas,1132.0
+444,Sultanpur Dabas,1908.0
+445,Bawana,1038.0
+446,Bawana,67.0
+447,Bawana,965.0
+448,Bawana,1964.0
+449,Ghoga,1651.0
+450,Ghoga,1632.0
+451,Sector 27,1212.0
+452,Sector 27,513.0
+453,Sector 25,575.0
+454,Sector 25,471.0
+455,Sector 24,534.0
+456,Sector 19,997.0
+457,Sector 18,527.0
+458,Sector 12,513.0
+459,Dwarka,415.0
+460,Dwarka Sector-3,265.0
+461,Mansa Ram Park,540.0
+462,Nawada,428.0
+463,Hastsal,921.0
+464,Tilangpur Kotla,1085.0
+465,Ranhola,511.0
+466,Ranhola,759.0
+467,Mundka,1116.0
+468,Mundka,924.0
+469,Mundka,1372.0
+470,Kirari Suleman Nagar,694.0
+471,Kirari Suleman Nagar,923.0
+472,Madanpur Dabas,1558.0
+473,Karala,1065.0
+474,Karala,866.0
+475,Karala,1407.0
+476,Sultanpur Dabas,1325.0
+477,Sultanpur Dabas,335.0
+478,Puth Khurd,629.0
+479,Puth Khurd,1327.0
+480,Bawana,1402.0
+481,Bawana,945.0
+482,Bawana,1349.0
+483,Ghoga,1631.0
+484,Ghoga,774.0
+485,Ghoga,733.0
+486,Ghoga,1573.0
+487,Lampur,2048.0
+488,Bijwasan,1813.0
+489,Bijwasan,919.0
+490,Sector 27,508.0
+491,Bharthal,320.0
+492,Sector 23,730.0
+493,Pochanpur,255.0
+494,Sector 19,333.0
+495,Amberhai,479.0
+496,Sector 11,273.0
+497,Sector 4,121.0
+498,Sri Chand Park,528.0
+499,Om Vihar,225.0
+500,Ram Nagar,801.0
+501,Hastsal,113.0
+502,Nilothi,735.0
+503,Nilothi,725.0
+504,Kammruddin Nagar,1470.0
+505,Kammruddin Nagar,527.0
+506,Nangloi Extension,392.0
+507,Kirari Suleman Nagar,1369.0
+508,Kirari Suleman Nagar,494.0
+509,Kirari Suleman Nagar,784.0
+510,Begum Pur,1101.0
+511,Begum Pur,700.0
+512,Begum Pur,1330.0
+513,Barwala,2075.0
+514,Barwala,1275.0
+515,Puth Khurd,909.0
+516,Puth Khurd,438.0
+517,Puth Khurd,1248.0
+518,Sector 6,2080.0
+519,Sector 6,1205.0
+520,Sector 6,758.0
+521,Sector 6,1304.0
+522,Ghoga,688.0
+523,Ghoga,641.0
+524,Lampur,1309.0
+525,Lampur,1058.0
+526,Lampur,1588.0
+527,Lampur,2435.0
+528,Bijwasan,2404.0
+529,Bijwasan,1414.0
+530,Bijwasan,467.0
+531,Bijwasan,513.0
+532,Sector 26,705.0
+533,Sector 22,294.0
+534,Sector 22,708.0
+535,Sector 20,222.0
+536,Sector 10,227.0
+537,Sector 6,503.0
+538,Sector 5,386.0
+539,Sanjay Enclave,471.0
+540,Uttam Nagar,374.0
+541,JJ Colony,320.0
+542,Hastsal Village,461.0
+543,Nilothi,690.0
+544,Nilothi,680.0
+545,Nilothi,1565.0
+546,Kammruddin Nagar,838.0
+547,Nangloi,629.0
+548,Nangloi,1055.0
+549,Sultanpuri,509.0
+550,Sultanpuri,1113.0
+551,Begum Pur,917.0
+552,Begampur,325.0
+553,Begampur,1045.0
+554,Barwala,1840.0
+555,Barwala,840.0
+556,Barwala,165.0
+557,Barwala,1161.0
+558,Puth Khurd,1831.0
+559,Sector 6,1953.0
+560,Sector 6,969.0
+561,Sector 6,252.0
+562,Sanoth,1030.0
+563,Ghoga,1532.0
+564,Ghoga,1512.0
+565,Lampur,799.0
+566,Lampur,206.0
+567,Lampur,1203.0
+568,Lampur,2203.0
+569,Kapashera,2393.0
+570,Bijwasan,1578.0
+571,Bijwasan,841.0
+572,Pushpanjali,539.0
+573,Pushpanjali,1052.0
+574,Shahbad Muhammadpur,410.0
+575,Sector 21,612.0
+576,Bagrola,416.0
+577,Sector 9,498.0
+578,Sector 7,463.0
+579,Sector 2,193.0
+580,Mahavir Enclave Part 3,469.0
+581,Jivan Park,210.0
+582,Block A1,273.0
+583,Budella,62.0
+584,Vikaspuri,797.0
+585,Keshopur,1497.0
+586,Nangloi,1728.0
+587,Nangloi,780.0
+588,Nangloi,412.0
+589,Rajapark Colony,336.0
+590,Sultanpuri,491.0
+591,Sultanpuri,1105.0
+592,Begampur,1212.0
+593,Begampur,675.0
+594,Begampur,1201.0
+595,Prahladpur Banger,1006.0
+596,Prahladpur Banger,828.0
+597,Barwala,1052.0
+598,Barwala,1558.0
+599,Naya Bans,2124.0
+600,Naya Bans,2091.0
+601,Sector 6,1558.0
+602,Sanoth,747.0
+603,Sanoth,253.0
+604,Sanoth,1253.0
+605,Narela,1946.0
+606,Bankner,1029.0
+607,Bankner,232.0
+608,Bankner,1025.0
+609,Bankner,2011.0
+610,Bankner,3007.0
+611,Kapashera,1020.0
+612,Kapashera,412.0
+613,Pushpanjali,478.0
+614,Pushpanjali,1023.0
+615,Shahbad Muhammadpur,686.0
+616,Sector 8,967.0
+617,Bagrola,621.0
+618,Raj Nagar I,685.0
+619,Palam Village,314.0
+620,Mahavir Enclave,60.0
+621,Vijay Enclave,283.0
+622,Block C1,179.0
+623,Block A3,489.0
+624,Krishna Park Extension,352.0
+625,Keshopur,183.0
+626,Guru Nanak Nagar,808.0
+627,Sunder Vihar,741.0
+628,Sunder Vihar,1255.0
+629,Harijan Basti,992.0
+630,Rajapark Colony,802.0
+631,Rajapark Colony,1457.0
+632,Sultanpuri,1790.0
+633,Begampur,1954.0
+634,Begampur,1675.0
+635,Prahladpur Banger,1681.0
+636,Prahladpur Banger,706.0
+637,Prahladpur Banger,416.0
+638,Prahladpur Banger,1359.0
+639,Khera Khurd,1489.0
+640,Naya Bans,1191.0
+641,Naya Bans,1132.0
+642,Holambi Khurd,1151.0
+643,Sanoth,1249.0
+644,Sanoth,1033.0
+645,Sanoth,1604.0
+646,Narela,1154.0
+647,Narela,734.0
+648,Bankner,768.0
+649,Bankner,1259.0
+650,Bankner,2140.0
+651,Bankner,3095.0
+652,Kapashera,2024.0
+653,Kapashera,1108.0
+654,Kapashera,597.0
+655,Samalkha,260.0
+656,Samalkha,1245.0
+657,Shahbad Muhammadpur,1665.0
+658,Sector 8,1759.0
+659,Raj Nagar II,1001.0
+660,Raj Nagar II,211.0
+661,Manglapuri,293.0
+662,Durga Park,475.0
+663,Raghu Nagar,244.0
+664,Block C3,416.0
+665,Block B3,56.0
+666,Ganesh Nagar,270.0
+667,Sant Nagar,220.0
+668,Shahpura,547.0
+669,Sunder Vihar,260.0
+670,Paschim Vihar,541.0
+671,Vidya Vihar,1271.0
+672,Vidya Vihar,690.0
+673,Vidya Vihar,1155.0
+674,Vidya Vihar,2048.0
+675,Sector 10,2126.0
+676,Sector 10,2255.0
+677,Prahladpur Banger,2077.0
+678,Prahladpur Banger,1409.0
+679,Prahladpur Banger,1288.0
+680,Khera Khurd,1617.0
+681,Khera Khurd,685.0
+682,Khera Khurd,567.0
+683,Naya Bans,434.0
+684,Holambi Khurd,186.0
+685,Holambi Kalan,283.0
+686,Holambi Kalan,1076.0
+687,Shahpur Garhi,1349.0
+688,Narela,937.0
+689,Narela,292.0
+690,Narela,1137.0
+691,Bankner,2030.0
+692,Bankner,2668.0
+693,Rajokri,1871.0
+694,Rajokri,1290.0
+695,Rajokri,1351.0
+696,Samalkha,1180.0
+697,Samalkha,936.0
+698,Samalkha,1536.0
+699,Delhi Aerocity,2253.0
+700,Prahladpur,1725.0
+701,Prahladpur,726.0
+702,Prahladpur,281.0
+703,Kailash Puri,533.0
+704,Kamal Park,117.0
+705,Institutional Area,223.0
+706,Pratap Nagar,642.0
+707,Fateh Nagar,515.0
+708,Ashok Nagar,107.0
+709,Chaukhandi,426.0
+710,Vishnu Garden,193.0
+711,Khyala,726.0
+712,Paschim Vihar,599.0
+713,Vidya Vihar,1115.0
+714,Vidya Vihar,322.0
+715,Vidya Vihar,981.0
+716,Sector 10,1651.0
+717,Sector 10,1136.0
+718,Sector 10,1362.0
+719,Sultanpur Daulatpur,1666.0
+720,Sultanpur Daulatpur,998.0
+721,Sultanpur Daulatpur,1103.0
+722,Khera Khurd,1693.0
+723,Khera Khurd,849.0
+724,Khera Khurd,757.0
+725,Naya Bans,1047.0
+726,Holambi Khurd,863.0
+727,Holambi Kalan,720.0
+728,Shahpur Garhi,427.0
+729,Shahpur Garhi,652.0
+730,Tikri Khurd,1347.0
+731,Narela,1277.0
+732,Narela,1685.0
+733,Narela,2459.0
+734,Singhu,3216.0
+735,Aya Nagar,2465.0
+736,Rajokri,1436.0
+737,Rajokri,473.0
+738,Rajokri,622.0
+739,West End Greens,470.0
+740,Rangpuri,1127.0
+741,Rangpuri,1203.0
+742,Delhi Aerocity,1294.0
+743,Delhi Aerocity,1908.0
+744,Prahladpur,1192.0
+745,Prahladpur,987.0
+746,Sadar Bazar,1284.0
+747,Nangal Raya,973.0
+748,Nangal Raya,543.0
+749,EA Pocket,203.0
+750,Hari Nagar,346.0
+751,Block 4,296.0
+752,Tartarpur,266.0
+753,Raghubir Nagar,323.0
+754,Raghubir Nagar,693.0
+755,Janta Colony,480.0
+756,Janta Colony,945.0
+757,Pushpanjali Enclave,449.0
+758,Pushpanjali Enclave,552.0
+759,Rohini,1030.0
+760,Sector 10,246.0
+761,Sector 10,791.0
+762,Sultanpur Daulatpur,1392.0
+763,Sultanpur Daulatpur,398.0
+764,Sultanpur Daulatpur,616.0
+765,Khera Kalan,1448.0
+766,Khera Kalan,493.0
+767,Khera Kalan,623.0
+768,Khera Kalan,1592.0
+769,Holambi Khurd,1859.0
+770,Shahpur Garhi,1595.0
+771,Shahpur Garhi,887.0
+772,Shahpur Garhi,1015.0
+773,Tikri Khurd,377.0
+774,Singhola Village,808.0
+775,Singhola Village,1241.0
+776,Singhu,1810.0
+777,Singhu,2537.0
+778,Aya Nagar,2013.0
+779,Aya Nagar,1489.0
+780,Aya Nagar,1543.0
+781,Aya Nagar,2132.0
+782,Rajokri,1619.0
+783,Rajokri,885.0
+784,West End Greens,944.0
+785,West End Greens,742.0
+786,Rangpuri,414.0
+787,Delhi Aerocity,555.0
+788,Delhi Aerocity,523.0
+789,Delhi Aerocity,1496.0
+790,Shumran Lines,1359.0
+791,Shumran Lines,389.0
+792,Sannaiyat Lines,497.0
+793,Sadar Bazar,553.0
+794,Nangal Raya,516.0
+795,Mayapuri Industrial Area II,286.0
+796,Mayapuri,139.0
+797,Press Colony,300.0
+798,Rajouri Garden,258.0
+799,Shivaji Place,215.0
+800,Janta Colony,673.0
+801,Madipur,347.0
+802,Madhuban Enclave,596.0
+803,Pushpanjali Enclave,1071.0
+804,Pitampura,752.0
+805,Razapur,950.0
+806,Razapur,280.0
+807,Razapur,1120.0
+808,Badli Industrial Area Phase 2,1512.0
+809,Badli Industrial Area Phase 2,824.0
+810,Raja Vihar,585.0
+811,Siraspur,726.0
+812,Khera Kalan,867.0
+813,Khera Kalan,947.0
+814,Budhpur Bajipur,1529.0
+815,Alipur,1388.0
+816,Bankoli,1658.0
+817,Khampur,1266.0
+818,Khampur,838.0
+819,Tikri Khurd,687.0
+820,Singhola Village,202.0
+821,Singhu,459.0
+822,Singhu,1171.0
+823,Mandi,1597.0
+824,Mandi,1695.0
+825,Mandi,2279.0
+826,Aya Nagar,1481.0
+827,Aya Nagar,599.0
+828,Aya Nagar,724.0
+829,Ghitorni,1388.0
+830,Ghitorni,1556.0
+831,Rajokri,1829.0
+832,Nangal Dewat,1307.0
+833,Tarapore Enclave,873.0
+834,Mahipalpur,939.0
+835,Mahipalpur,179.0
+836,Bana Singh Enclave,864.0
+837,Middle Shankar Vihar,991.0
+838,Shankar Range Colony,1170.0
+839,Shumran Lines,896.0
+840,Sannaiyat Lines,569.0
+841,Anuj Nayyar Vihar,188.0
+842,Chanan Singh Park,278.0
+843,CB Block,573.0
+844,Lohar Basti,321.0
+845,Ware Housing Scheme Block 1,228.0
+846,Mansarovar Garden,143.0
+847,Basai Darapur Extension,290.0
+848,Sudarshan Park,224.0
+849,Punjabi Bagh,282.0
+850,Arihant Nagar,950.0
+851,Rohit Kunj,791.0
+852,Pitampura,275.0
+853,Pitampura,932.0
+854,Razapur,739.0
+855,Haiderpur,1261.0
+856,Badli,1038.0
+857,Badli Industrial Area Phase 2,383.0
+858,Raja Vihar,459.0
+859,Siraspur,572.0
+860,Nangli Puna,1228.0
+861,Budhpur Bajipur,356.0
+862,Budhpur Bajipur,860.0
+863,Alipur,390.0
+864,Bankoli,840.0
+865,Bankoli,624.0
+866,Khampur,171.0
+867,Khampur,1062.0
+868,Singhu,1071.0
+869,Singhu,554.0
+870,Singhu,1211.0
+871,Mandi,655.0
+872,Mandi,867.0
+873,Mandi,1753.0
+874,Aya Nagar,1528.0
+875,Aya Nagar,707.0
+876,Aya Nagar,816.0
+877,Ghitorni,443.0
+878,Ghitorni,832.0
+879,Ghitorni,1786.0
+880,Nangal Dewat,896.0
+881,Nangal Dewat,116.0
+882,C-8,227.0
+883,Bana Singh Enclave,567.0
+884,Upper Shankar Vihar,528.0
+885,Middle Shankar Vihar,78.0
+886,Shankar Range Colony,407.0
+887,Jharera,55.0
+888,Gopinath Bazar,999.0
+889,Gopinath Bazar,758.0
+890,Chanan Singh Park,1188.0
+891,Naraina Village,597.0
+892,Naraina Vihar,167.0
+893,Budh Nagar,382.0
+894,Ware Housing Scheme Furniture Block,171.0
+895,Kirti Nagar,23.0
+896,New Moti Nagar,172.0
+897,Punjabi Bagh West,114.0
+898,Railway Colony,932.0
+899,Rohit Kunj,303.0
+900,District Park,463.0
+901,Kapil Vihar,1125.0
+902,Haiderpur,699.0
+903,Haiderpur,398.0
+904,Badli,85.0
+905,Samaipur Badli,361.0
+906,Libaspur,144.0
+907,Swaroop Nagar,760.0
+908,Nangli Puna,280.0
+909,Budhpur Bajipur,727.0
+910,Budhpur Bajipur,1068.0
+911,Alipur,614.0
+912,Bankoli,814.0
+913,Bankoli,588.0
+914,Hamidpur,514.0
+915,Hamidpur,574.0
+916,Hamidpur,1547.0
+917,Singhu,1550.0
+918,Singhu,1888.0
+919,Mandi,555.0
+920,Mandi,794.0
+921,Jaunpur,1371.0
+922,Jaunpur,657.0
+923,Jaunpur,993.0
+924,Ghitorni,1404.0
+925,Ghitorni,683.0
+926,Ghitorni,982.0
+927,D-3,1322.0
+928,D-6,644.0
+929,D-6,112.0
+930,C-4,111.0
+931,C-5,748.0
+932,Upper Shankar Vihar,979.0
+933,Yogendar Vihar,748.0
+934,Shankar Range Colony,981.0
+935,Jharera,1055.0
+936,Arjun Vihar,462.0
+937,Arjun Vihar,861.0
+938,Todapur,1681.0
+939,Todapur,872.0
+940,Indrapuri,535.0
+941,Budh Nagar,810.0
+942,Naraina Industrial Area - II,594.0
+943,Shadipur,149.0
+944,DLF Midtown,343.0
+945,New Ashok Park,34.0
+946,Sarup Nagar,385.0
+947,Netaji Subhash Place,457.0
+948,Block C5,427.0
+949,Shalimar Bagh,774.0
+950,Govind Mohalla,1001.0
+951,Ambedkar Nagar,386.0
+952,Sanjay Enclave,531.0
+953,EE Block,305.0
+954,Swaroop Nagar Extension,174.0
+955,Swaroop Nagar,329.0
+956,Nangli Puna,806.0
+957,Kadipur,917.0
+958,Jindpur,477.0
+959,Jindpur,523.0
+960,Jindpur,1523.0
+961,Bankoli,1517.0
+962,Hamidpur,915.0
+963,Hamidpur,949.0
+964,Tajpur Kalan,1336.0
+965,Mandi,1966.0
+966,Mandi,1479.0
+967,Mandi,1584.0
+968,Jaunpur,1282.0
+969,Jaunpur,442.0
+970,Jaunpur,865.0
+971,Chattarpur Farms,821.0
+972,Sultanpur,599.0
+973,Sultanpur,111.0
+974,D-2,624.0
+975,D-3,113.0
+976,B-2,135.0
+977,B-9,651.0
+978,C-4,1303.0
+979,Vasant Vihar,765.0
+980,Vasant Vihar,349.0
+981,West End,399.0
+982,Anand Niketan,376.0
+983,Dhaula Kuan,573.0
+984,Dhaula Kuan,446.0
+985,Dhaula Kuan,1439.0
+986,Todapur,617.0
+987,Todapur,560.0
+988,South Patel Nagar,1209.0
+989,Ranjeet Nagar,235.0
+990,West Patel Nagar,122.0
+991,Baljeet Nagar,659.0
+992,Amar Park,70.0
+993,Kanhaiya Nagar,179.0
+994,Block C5,988.0
+995,Wazirpur Industrial Area,356.0
+996,Shalimar Bagh,261.0
+997,Sanjay Nagar,724.0
+998,DDA Flats F Block,67.0
+999,Lakhi Park,273.0
+1000,Rajiv Nagar,101.0
+1001,B-6,140.0
+1002,C-6,658.0
+1003,Kadipur,510.0
+1004,Kadipur,648.0
+1005,Mukhmelpur,526.0
+1006,Mukhmelpur,652.0
+1007,Mukhmelpur,1605.0
+1008,Bakhtawar Pur,1153.0
+1009,Bakhtawar Pur,705.0
+1010,Tajpur Kalan,661.0
+1011,Tajpur Kalan,485.0
+1012,Tajpur Kalan,1426.0
+1013,Bhati Kalan,2984.0
+1014,Dera,2091.0
+1015,Dera,1213.0
+1016,Dera,753.0
+1017,Dera,1290.0
+1018,Fatehpur Beri,1401.0
+1019,Jaunpur,1400.0
+1020,Chattarpur Farms,916.0
+1021,Chattarpur Farms,212.0
+1022,DLF Farms,944.0
+1023,Manglapuri,347.0
+1024,D-1,109.0
+1025,Kishangarh,394.0
+1026,Prajapati Colony,436.0
+1027,B-5,1169.0
+1028,Munirka,1148.0
+1029,Munirka,153.0
+1030,Sector 5,335.0
+1031,Sector 9,247.0
+1032,Moti Bagh,213.0
+1033,Satya Niketan,339.0
+1034,Dhaula Kuan,1002.0
+1035,Malcha,1214.0
+1036,Todapur,1415.0
+1037,Todapur,1391.0
+1038,South Patel Nagar,1182.0
+1039,East Patel Nagar,209.0
+1040,East Patel Nagar,791.0
+1041,Anand Parbat,296.0
+1042,Dena Ram Park,909.0
+1043,Shanti Nagar,790.0
+1044,Ashok Vihar,63.0
+1045,Jailer Wala Bagh,569.0
+1046,Azadpur,190.0
+1047,Indra Nagar,155.0
+1048,Dhobi Ghat,105.0
+1049,E Block,187.0
+1050,B Block,653.0
+1051,Guru Nanak Dev Colony,45.0
+1052,B Block,145.0
+1053,Ibrahimpur,644.0
+1054,Ibrahimpur,395.0
+1055,Mukhmelpur,1376.0
+1056,Hiranki,603.0
+1057,Mohammadpur Ramzanpur,801.0
+1058,Bakhtawar Pur,964.0
+1059,Bakhtawar Pur,311.0
+1060,Akabarpur Majra,863.0
+1061,Tajpur Kalan,827.0
+1062,Palla,1257.0
+1063,Palla,2096.0
+1064,Bhati Kalan,2344.0
+1065,Bhati Kalan,1573.0
+1066,Dera,984.0
+1067,Dera,253.0
+1068,Asola,1062.0
+1069,Harswaroop Colony,413.0
+1070,Chandan Hola,626.0
+1071,Chandan Hola,556.0
+1072,DLF Farms,689.0
+1073,Chattarpur,780.0
+1074,Chattarpur,280.0
+1075,Chhattarpur,580.0
+1076,Mehrauli,529.0
+1077,Mehrauli,537.0
+1078,Qutab Institutional Area,605.0
+1079,Ber Sarai,457.0
+1080,Sector 3,225.0
+1081,Sector 1,284.0
+1082,Sector 13,157.0
+1083,North Moti Bagh,465.0
+1084,Chanakyapuri,889.0
+1085,Malcha,623.0
+1086,Malcha,422.0
+1087,Malcha,1403.0
+1088,Rajendra Nagar,1574.0
+1089,Rajendra Nagar,577.0
+1090,Rajendra Nagar,434.0
+1091,Bapa Nagar,268.0
+1092,Moti Bagh (East),672.0
+1093,DDA SFS Flats,225.0
+1094,Shrinagar Colony,305.0
+1095,Rana Pratap Bagh,731.0
+1096,GT Karnal Road Industrial Area,351.0
+1097,Model Town,444.0
+1098,Kewal Park,712.0
+1099,Pakistani Jhuggi,591.0
+1100,EE Jhuggi,660.0
+1101,Bhagat Colony A2 Block,988.0
+1102,Surat Vihar Village,427.0
+1103,C Block,738.0
+1104,Ibrahimpur,1069.0
+1105,Ibrahimpur,940.0
+1106,Hiranki,1367.0
+1107,Hiranki,548.0
+1108,Mohammadpur Ramzanpur,203.0
+1109,Tiggipur,1005.0
+1110,Tiggipur,44.0
+1111,Akabarpur Majra,450.0
+1112,Palla,159.0
+1113,Palla,916.0
+1114,Palla,1911.0
+1115,Bhati Kalan,2021.0
+1116,Bhati Kalan,1031.0
+1117,Bhati Kalan,206.0
+1118,Bhati Khurd,641.0
+1119,Asola,978.0
+1120,Asola,430.0
+1121,Chandan Hola,874.0
+1122,Chandan Hola,826.0
+1123,Satbari,305.0
+1124,Satbari,825.0
+1125,Tara Market,121.0
+1126,Dhan Mill Compound,623.0
+1127,Lado Sarai,933.0
+1128,Lado Sarai,173.0
+1129,Adchini,748.0
+1130,Jia Sarai,238.0
+1131,Hauz Khas,369.0
+1132,Humayunpur,323.0
+1133,Bikaji Cama Place,475.0
+1134,Netaji Nagar Market,669.0
+1135,Chanakyapuri,676.0
+1136,Chanakyapuri,530.0
+1137,Willingdon Crescent,385.0
+1138,Presidential Estate,444.0
+1139,Presidential Estate,1264.0
+1140,Rajendra Nagar,1087.0
+1141,Rajendra Nagar,1019.0
+1142,Karol Bagh,406.0
+1143,Padam Nagar,478.0
+1144,Sarai Rohilla,430.0
+1145,Gilahri Bagh,394.0
+1146,CC Colony,116.0
+1147,Ishwar Colony,376.0
+1148,Malikpur,359.0
+1149,Model Town,1083.0
+1150,Pakistani Jhuggi,1576.0
+1151,Bhagat Colony A2 Block,1152.0
+1152,Bhagat Colony A2 Block,154.0
+1153,Bhagat Colony A2 Block,848.0
+1154,Adarsh Society,1633.0
+1155,Ibrahimpur,1967.0
+1156,Ibrahimpur,1900.0
+1157,Hiranki,1951.0
+1158,Hiranki,1495.0
+1159,Mohammadpur Ramzanpur,1200.0
+1160,Tiggipur,1387.0
+1161,Jhangola,774.0
+1162,Jhangola,501.0
+1163,Palla,1133.0
+1164,Palla,1448.0
+1165,Palla,2216.0
+1166,Bhati Kalan,2162.0
+1167,Bhati Kalan,1285.0
+1168,Bhati Kalan,795.0
+1169,Bhati Khurd,564.0
+1170,Bhati Khurd,1410.0
+1171,Asola,1419.0
+1172,Kharak,871.0
+1173,Kharak,639.0
+1174,Satbari,1242.0
+1175,Maidan Garhi,1120.0
+1176,Indira Enclave,466.0
+1177,Freedom Fighters Enclave,234.0
+1178,Said-ul-Ajaib,205.0
+1179,Geetanjali Enclave,528.0
+1180,Navjeevan Vihar,225.0
+1181,Kalu Sarai,380.0
+1182,Green Park,451.0
+1183,Green Park Extension,263.0
+1184,Kidwai Nagar West,294.0
+1185,Pilanji,153.0
+1186,Safdarjung,965.0
+1187,Safdarjung,1026.0
+1188,Willingdon Crescent,741.0
+1189,Raisina Hill,268.0
+1190,Ashok Place,421.0
+1191,Palika Niketan,645.0
+1192,Aram Bagh,741.0
+1193,Bara Hindu Rao,817.0
+1194,Bara Hindu Rao,245.0
+1195,Kabir Basti,492.0
+1196,Sarai Danish Mand Khan,90.0
+1197,Maurice Nagar,206.0
+1198,Hudson Line,219.0
+1199,"Outram Line, Guru Tegh Bahadur Nagar",526.0
+1200,Indira Vikas Colony,355.0
+1201,Gandhi Vihar,1006.0
+1202,Bhagat Colony A2 Block,1541.0
+1203,Bhagat Colony A2 Block,1035.0
+1204,Bhagat Colony A2 Block,1330.0
+1205,Bhagat Colony A2 Block,2113.0
+1206,Ibrahimpur,2932.0
+1207,Ibrahimpur,2888.0
+1208,Hiranki,2782.0
+1209,Mohammadpur Ramzanpur,2400.0
+1210,Jhangola,1786.0
+1211,Jhangola,916.0
+1212,Jhangola,700.0
+1213,Jhangola,1463.0
+1214,Palla,2314.0
+1215,Palla,2858.0
+1216,Bhati Kalan,2695.0
+1217,Bhati Kalan,2059.0
+1218,Bhati Khurd,1598.0
+1219,Bhati Khurd,1491.0
+1220,Bhati Khurd,1973.0
+1221,Kharak,1735.0
+1222,Kharak,811.0
+1223,Kharak,555.0
+1224,Kharak,1399.0
+1225,Indira Enclave,1643.0
+1226,Indira Enclave,919.0
+1227,Sainik Farms,792.0
+1228,Said-ul-Ajaib,800.0
+1229,Saket,316.0
+1230,Malviya Nagar,166.0
+1231,Panchsheel Park,277.0
+1232,Gulmohar Park,488.0
+1233,Gautam Nagar,77.0
+1234,Kidwai Nagar East,144.0
+1235,INA Market,666.0
+1236,Jor Bagh,254.0
+1237,Safdarjung,578.0
+1238,Central Vista,916.0
+1239,Central Vista,628.0
+1240,Ashok Place,654.0
+1241,Sector 4,465.0
+1242,Paharganj,189.0
+1243,Nabi Karim,233.0
+1244,Teliwara,111.0
+1245,Tis Hazari,602.0
+1246,Kamala Nehru Ridge,294.0
+1247,North Campus,131.0
+1248,Banarsi Dass Estate,410.0
+1249,Patrachar,639.0
+1250,Gandhi Vihar,607.0
+1251,Gandhi Vihar,404.0
+1252,Wazirabad,704.0
+1253,Wazirabad,1503.0
+1254,Bhagat Colony A2 Block,2195.0
+1255,Bhagat Colony A2 Block,2741.0
+1256,Bhagat Colony A2 Block,3494.0
+1257,Ibrahimpur,3881.0
+1258,Hiranki,3698.0
+1259,Jhangola,2330.0
+1260,Jhangola,1755.0
+1261,Jhangola,1652.0
+1262,Jhangola,2093.0
+1263,Jhangola,2834.0
+1264,Palla,3664.0
+1265,Sanjay Colony,2852.0
+1266,Sanjay Colony,1921.0
+1267,Sanjay Colony,1118.0
+1268,Sanjay Colony,900.0
+1269,Sanjay Colony,1539.0
+1270,Kharak,2216.0
+1271,Kharak,1599.0
+1272,Kharak,1486.0
+1273,Kharak,1964.0
+1274,Sainik Farms,1912.0
+1275,Sainik Farms,925.0
+1276,Sainik Farms,236.0
+1277,Pushp Vihar,702.0
+1278,Pushp Vihar,380.0
+1279,Jagdamba Camp,177.0
+1280,Soami Nagar,298.0
+1281,Anand Lok,565.0
+1282,Uday Park,284.0
+1283,South Extension I,169.0
+1284,Prem Nagar,307.0
+1285,Lodhi Colony,517.0
+1286,Rabindra Nagar,172.0
+1287,Pandara Park,642.0
+1288,Central Vista,517.0
+1289,Connaught Place,850.0
+1290,Shankar Market,31.0
+1291,Hazrat Khwaja Mir Dard Colony,620.0
+1292,Ballimaran,208.0
+1293,Mori Gate,359.0
+1294,Mori Gate,643.0
+1295,Civil Lines,254.0
+1296,Chandrawal,788.0
+1297,Aruna Nagar,147.0
+1298,Sanjay Basti,130.0
+1299,Sanjay Basti,1052.0
+1300,Wazirabad,741.0
+1301,Wazirabad,558.0
+1302,Wazirabad,1440.0
+1303,Wazirabad,2416.0
+1304,Wazirabad,3406.0
+1305,Bhagat Colony A2 Block,4154.0
+1306,Ibrahimpur,4878.0
+1307,Mohammadpur Ramzanpur,4635.0
+1308,Jhangola,2705.0
+1309,Sanjay Colony,2724.0
+1310,Sanjay Colony,1726.0
+1311,Sanjay Colony,735.0
+1312,Sanjay Colony,315.0
+1313,Sanjay Colony,1288.0
+1314,Sanjay Colony,2284.0
+1315,Kharak,2541.0
+1316,Kharak,2471.0
+1317,Kharak,2785.0
+1318,Sainik Farms,2255.0
+1319,Sainik Farms,1511.0
+1320,Khanpur,606.0
+1321,Khanpur,427.0
+1322,Madangir,161.0
+1323,Savitri Nagar,132.0
+1324,Panchsheel Enclave,261.0
+1325,Greater Kailash I,425.0
+1326,Andrews Ganj Extension,229.0
+1327,Defence Colony,109.0
+1328,Kasturba Nagar,714.0
+1329,Lodhi Colony,632.0
+1330,Golf Links,253.0
+1331,Cornwallis Colony,202.0
+1332,Pandara Park,1060.0
+1333,Indraprastha Estate,1056.0
+1334,Hazrat Khwaja Mir Dard Colony,837.0
+1335,Hazrat Khwaja Mir Dard Colony,546.0
+1336,Vakilpura,179.0
+1337,Chandni Chowk,570.0
+1338,Kashmere Gate,723.0
+1339,Civil Lines,1191.0
+1340,New Chandrawal,1240.0
+1341,Tibetan Colony,801.0
+1342,Tibetan Colony,835.0
+1343,Sonia Vihar,1369.0
+1344,Sonia Vihar,1311.0
+1345,Wazirabad,1458.0
+1346,Wazirabad,1972.0
+1347,Wazirabad,2766.0
+1348,Wazirabad,3663.0
+1349,Wazirabad,4602.0
+1350,Wazirabad,5562.0
+1351,Sanjay Colony,2066.0
+1352,Sanjay Colony,1353.0
+1353,Sanjay Colony,1178.0
+1354,Sanjay Colony,1717.0
+1355,Sanjay Colony,2551.0
+1356,Kharak,3465.0
+1357,Sangam Vihar,2926.0
+1358,Sangam Vihar,1971.0
+1359,Sangam Vihar,1101.0
+1360,Tigri,490.0
+1361,Tigri,512.0
+1362,Narmada Apartments,659.0
+1363,Greater Kailash II,91.0
+1364,Greater Kailash I,1050.0
+1365,Kailash Colony,108.0
+1366,Amar Colony,80.0
+1367,Lajpat Nagar II,74.0
+1368,Jal Vihar,707.0
+1369,Nizamuddin West,200.0
+1370,Sunder Nagar,470.0
+1371,Sunder Nagar,553.0
+1372,Indraprastha Estate,1312.0
+1373,Indraprastha Estate,312.0
+1374,Indraprastha Estate,688.0
+1375,دریا گنج,400.0
+1376,دریا گنج,624.0
+1377,Chandni Chowk,1305.0
+1378,Kashmere Gate,1612.0
+1379,Gamri Village,1908.0
+1380,Gamri Village,1228.0
+1381,Gamri Village,1172.0
+1382,Khajuri,1357.0
+1383,Sonia Vihar,626.0
+1384,Sonia Vihar,486.0
+1385,Sonia Vihar,1442.0
+1386,Sonia Vihar,2434.0
+1387,Wazirabad,3386.0
+1388,Wazirabad,4151.0
+1389,Sanjay Colony,2263.0
+1390,Sanjay Colony,2163.0
+1391,Sanjay Colony,2498.0
+1392,Sanjay Colony,3130.0
+1393,Sangam Vihar,2851.0
+1394,Sangam Vihar,1859.0
+1395,Sangam Vihar,884.0
+1396,Sangam Vihar,328.0
+1397,Gangotri Apartments,917.0
+1398,Gangotri Apartments,90.0
+1399,Chittaranjan Park,389.0
+1400,Chittaranjan Park,615.0
+1401,Sant Nagar,401.0
+1402,Sriniwaspuri,487.0
+1403,Nehru Nagar,237.0
+1404,Jal Vihar,615.0
+1405,Jaipur Estate,127.0
+1406,Nizamuddin East,897.0
+1407,Sunder Nagar,1231.0
+1408,Indraprastha Estate,1645.0
+1409,Indraprastha Estate,1040.0
+1410,Indraprastha Estate,1207.0
+1411,دریا گنج,1172.0
+1412,Safeda Basti,1090.0
+1413,Valmiki Colony,942.0
+1414,Valmiki Colony,650.0
+1415,Seelampur,1258.0
+1416,Gamri Village,573.0
+1417,Gamri Village,443.0
+1418,Khajuri,377.0
+1419,Khajuri,927.0
+1420,Sonia Vihar,868.0
+1421,Sonia Vihar,1612.0
+1422,Karawal Nagar,2139.0
+1423,Karawal Nagar,2799.0
+1424,Karawal Nagar,3619.0
+1425,Sangam Vihar,3114.0
+1426,Sangam Vihar,2242.0
+1427,Sangam Vihar,1533.0
+1428,Tughlakabad,822.0
+1429,Tughlakabad,632.0
+1430,Tughlakabad Extension,374.0
+1431,Govindpuri,201.0
+1432,Giri Nagar,375.0
+1433,Okhla Phase III,672.0
+1434,Sriniwaspuri Extension,368.0
+1435,Maharani Bagh,214.0
+1436,Kilokri,156.0
+1437,Vidyut Vihar,925.0
+1438,Nizamuddin East,1532.0
+1439,Sunder Nagar,2174.0
+1440,Pandav Nagar,1930.0
+1441,Shakarpur,1552.0
+1442,Laxmi Nagar,1101.0
+1443,New Lahore Mohalla,913.0
+1444,Safeda Basti,455.0
+1445,Safeda Basti,545.0
+1446,Seelampur,165.0
+1447,Seelampur,856.0
+1448,Gamri Village,1073.0
+1449,Bhajanpura,633.0
+1450,Chand Bagh,117.0
+1451,Chand Bagh,1036.0
+1452,Karawal Nagar,1194.0
+1453,Karawal Nagar,827.0
+1454,Vishwakarma Colony,1959.0
+1455,Vishwakarma Colony,1436.0
+1456,Tughlakabad,800.0
+1457,Tughlakabad,603.0
+1458,Okhla Phase - I,759.0
+1459,Okhla Phase II,439.0
+1460,Sanjay Colony,392.0
+1461,Okhla Phase III,333.0
+1462,Ishwar Nagar,383.0
+1463,Khizrabad,292.0
+1464,Khizrabad,720.0
+1465,Vidyut Vihar,1196.0
+1466,IFS Apartments,1842.0
+1467,Samaspur,1370.0
+1468,Pandav Nagar,1003.0
+1469,Shakarpur,664.0
+1470,Laxmi Nagar,333.0
+1471,Shastri Nagar,246.0
+1472,Geeta Colony,7.0
+1473,Gandhi Nagar,376.0
+1474,Kanti Nagar Extension,321.0
+1475,Subash Park Extension,225.0
+1476,Babarpur,396.0
+1477,Block C-10 Yamuna Vihar,167.0
+1478,Brijpuri,105.0
+1479,Brijpuri,1058.0
+1480,Karawal Nagar,889.0
+1481,Karawal Nagar,224.0
+1482,Vishwakarma Colony,545.0
+1483,Vishwakarma Colony,722.0
+1484,"C-17, Pocket C, Okhla Phase I, Okhla Industrial Estate",1308.0
+1485,"C-17, Pocket C, Okhla Phase I, Okhla Industrial Estate",310.0
+1486,"C-17, Pocket C, Okhla Phase I, Okhla Industrial Estate",693.0
+1487,Jasola Vihar,834.0
+1488,Gaffar Manzil,546.0
+1489,Gaffar Manzil,454.0
+1490,Jamia Nagar,180.0
+1491,Jamia Nagar,1120.0
+1492,"Pocket - 4, Mayur Vihar Phase 1",1895.0
+1493,"Pocket - 4, Mayur Vihar Phase 1",1083.0
+1494,IFS Apartments,552.0
+1495,Samaspur,131.0
+1496,Ganesh Nagar,145.0
+1497,Preet Vihar,576.0
+1498,Arjun Park,688.0
+1499,Sarojini Park,886.0
+1500,East Arjun Nagar,974.0
+1501,Bihari Colony,366.0
+1502,Naveen Shahdara,77.0
+1503,Gorakh Park,391.0
+1504,Block C-12 Yamuna Vihar,617.0
+1505,Block C-4 Yamuna Vihar,625.0
+1506,Brijpuri,1517.0
+1507,Karawal Nagar,1469.0
+1508,Karawal Nagar,1190.0
+1509,Vishwakarma Colony,729.0
+1510,TKD electric loco shed,114.0
+1511,TKD electric loco shed,986.0
+1512,Sarita Vihar,1000.0
+1513,Sarita Vihar,68.0
+1514,Jasola Vihar,168.0
+1515,Jasola,535.0
+1516,Okhla Village,548.0
+1517,Okhla Village,794.0
+1518,Jamia Nagar,1404.0
+1519,New Ashok Nagar,1531.0
+1520,"Pocket - 4, Mayur Vihar Phase 1",732.0
+1521,Pratap Nagar,50.0
+1522,Mayur Vihar Phase 1 Pocket 5,331.0
+1523,West Vinod Nagar,196.0
+1524,East School Block,473.0
+1525,D Block,513.0
+1526,Karkarduma,612.0
+1527,East Arjun Nagar,324.0
+1528,Ambedkar Nagar,159.0
+1529,Shahdara,553.0
+1530,Balbir Nagar Extension,563.0
+1531,West Jyoti Nagar,857.0
+1532,Nand Nagari,1291.0
+1533,Block C-4 Yamuna Vihar,2038.0
+1534,Badarpur,811.0
+1535,Tajpur Pahadi,507.0
+1536,Gautampuri,587.0
+1537,Gautampuri,413.0
+1538,Aali,564.0
+1539,Madanpur Khadar,304.0
+1540,Shaheen Bagh,531.0
+1541,Shaheen Bagh,584.0
+1542,Okhla Village,1472.0
+1543,New Ashok Nagar,777.0
+1544,New Ashok Nagar,486.0
+1545,Trilok Puri,427.0
+1546,Mayur Vihar II,493.0
+1547,East Vinod Nagar,258.0
+1548,Chhota Hasanpur,225.0
+1549,Anand Vihar,696.0
+1550,Karkarduma,443.0
+1551,Karkarduma,930.0
+1552,Jhilmil Colony,182.0
+1553,Jhilmil Colony,874.0
+1554,Nand Nagari,1204.0
+1555,Nand Nagari,204.0
+1556,Nand Nagari,796.0
+1557,Nand Nagari,1796.0
+1558,Badarpur,1757.0
+1559,Badarpur,863.0
+1560,Tajpur Pahadi,567.0
+1561,Tajpur Pahadi,965.0
+1562,Aali,850.0
+1563,Aali,718.0
+1564,Madanpur Khadar,1263.0
+1565,Shaheen Bagh,1333.0
+1566,Shaheen Bagh,1355.0
+1567,New Ashok Nagar,930.0
+1568,New Ashok Nagar,705.0
+1569,Dallupura Village,288.0
+1570,Kalyan Puri,309.0
+1571,East Vinod Nagar,759.0
+1572,Ghazipur,532.0
+1573,Anand Vihar,308.0
+1574,Anand Vihar,1081.0
+1575,Vivek Vihar,1011.0
+1576,Vivek Vihar,320.0
+1577,Rajendar Parsad Colony,100.0
+1578,Dilshad Garden,835.0
+1579,Nand Nagari,1005.0
+1580,Nand Nagari,1266.0
+1581,Nand Nagari,2048.0
+1582,Badarpur,1683.0
+1583,Saurabh Vihar,1419.0
+1584,Saurabh Vihar,513.0
+1585,Saurabh Vihar,716.0
+1586,Aali,1647.0
+1587,Aali,2123.0
+1588,Shaheen Bagh,2296.0
+1589,Dallupura Village,1241.0
+1590,Dallupura Village,713.0
+1591,Gharoli,711.0
+1592,Ghazipur,932.0
+1593,Ghazipur,565.0
+1594,Anand Vihar,1306.0
+1595,Anand Vihar,1667.0
+1596,Vivek Vihar,683.0
+1597,Dilshad Garden,585.0
+1598,Jawahar Park,589.0
+1599,Jawahar Park,1296.0
+1600,Nand Nagari,2138.0
+1601,Nand Nagari,2676.0
+1602,Saurabh Vihar,2462.0
+1603,Saurabh Vihar,1521.0
+1604,Saurabh Vihar,751.0
+1605,Saurabh Vihar,902.0
+1606,Saurabh Vihar,1751.0
+1607,Saurabh Vihar,2705.0
+1608,"Pocket A2, Flat 1-40",1648.0
+1609,"Pocket A2, Flat 1-40",652.0
+1610,"Pocket A2, Flat 1-40",366.0
+1611,Gharoli,798.0
+1612,Ghazipur,1534.0
+1613,Jawahar Park,940.0
+1614,Jawahar Park,466.0
+1615,Saurabh Vihar,1692.0
+1616,Saurabh Vihar,1765.0
+1617,Saurabh Vihar,2316.0
+1618,"Pocket A2, Flat 1-40",1116.0
+1619,"Pocket A2, Flat 1-40",977.0
+1620,Gharoli,1526.0
