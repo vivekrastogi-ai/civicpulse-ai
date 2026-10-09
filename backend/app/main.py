@@ -45,6 +45,13 @@ app.add_middleware(
 )
 
 
+from community import router as community_router  # noqa: E402
+from auth import router as auth_router  # noqa: E402
+
+app.include_router(community_router)
+app.include_router(auth_router)
+
+
 @lru_cache(maxsize=1)
 def get_model() -> RiskModel:
     return RiskModel()
