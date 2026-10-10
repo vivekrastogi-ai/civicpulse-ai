@@ -51,6 +51,10 @@ from auth import router as auth_router  # noqa: E402
 app.include_router(community_router)
 app.include_router(auth_router)
 
+from oauth import router as oauth_router  # noqa: E402
+
+app.include_router(oauth_router)
+
 
 @lru_cache(maxsize=1)
 def get_model() -> RiskModel:
@@ -425,3 +429,42 @@ def chat(req: ChatRequest):
             answer = rule_based_answer(q, info, rain, place, tips)
 
     return {"answer": answer, "source": source, "disclaimer": mode_note(mode)}
+
+@app.get("/api/v1/timeline")
+def timeline(cell_id: int, days: int = 8):
+    """Ek cell ka aaj se agle 7 din ka risk."""
+    out = []
+    today = _date.today()
+    for i in range(min(days, 8)):
+        d = (today + timedelta(days=i)).isoformat()
+        try:
+            row, _ = one_row(cell_id, d)
+        except HTTPException:
+            continue
+        prob, _ = get_model().predict(row)
+        out.append({"date": d,
+                    "rain_mm": round(float(row["rain_mm"].iloc[0]), 1),
+                    "risk_probability": round(float(prob[0]), 5)})
+    return {"cell_id": cell_id, "place_name": get_names().get(cell_id, f"Cell {cell_id}"), "days": out}
+
+
+@app.get("/api/v1/compare")
+def compare(cell_a: int, cell_b: int, date: str):
+    """Do jagah ka risk, barish aur top wajah side-by-side."""
+    out = []
+    for cid in (cell_a, cell_b):
+        row, mode = one_row(cid, date)
+        info = get_model().explain(row, top_n=3)
+        out.append({
+            "cell_id": cid,
+            "place_name": get_names().get(cid, f"Cell {cid}"),
+            "risk_probability": info["risk_probability"],
+            "risk_level": info["risk_level"],
+            "rain_mm": round(float(row["rain_mm"].iloc[0]), 1),
+            "elevation": round(float(row["elevation"].iloc[0]), 1),
+            "top_factors": info["top_factors"],
+        })
+    safer = min(out, key=lambda x: x["risk_probability"])
+    return {"date": date, "mode": mode, "places": out,
+            "summary": f"{safer['place_name']} is din relatively kam risk par hai "
+                       f"({safer['risk_probability'] * 100:.1f}%). Ye model ka estimate hai."}

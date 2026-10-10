@@ -50,8 +50,15 @@ def get_live_daily(points):
         return _CACHE["daily"]
     frames = []
     for lat, lon in points:
-        frames.append(_fetch_point(lat, lon))
+        try:
+            frames.append(_fetch_point(lat, lon))
+        except Exception as e:
+            print("Live point fail:", lat, lon, e)
         time.sleep(1)
+    if not frames:
+        if _CACHE["daily"] is not None:
+            return _CACHE["daily"]  # purana data, kuch na kuch
+        raise RuntimeError("Koi bhi live point nahi mila")
     daily = pd.concat(frames, ignore_index=True)
     _CACHE["daily"], _CACHE["t"] = daily, now
     return daily

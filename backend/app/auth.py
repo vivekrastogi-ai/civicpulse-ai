@@ -88,6 +88,19 @@ def require_admin(user: dict = Depends(current_user)) -> dict:
         raise HTTPException(403, "Sirf admin ke liye.")
     return user
 
+def password_problems(pw: str) -> list:
+    p = []
+    if len(pw) < 8:
+        p.append("kam se kam 8 akshar")
+    if not re.search(r"[A-Z]", pw):
+        p.append("ek bada letter (A-Z)")
+    if not re.search(r"[a-z]", pw):
+        p.append("ek chhota letter (a-z)")
+    if not re.search(r"\d", pw):
+        p.append("ek number")
+    if not re.search(r"[^A-Za-z0-9]", pw):
+        p.append("ek special character (jaise @ # !)")
+    return p
 
 class RegisterIn(BaseModel):
     name: str = Field(min_length=2, max_length=60)
@@ -105,6 +118,9 @@ def register(b: RegisterIn):
     email = b.email.lower().strip()
     if not EMAIL_RE.match(email):
         raise HTTPException(400, "Email sahi nahi hai.")
+    problems = password_problems(b.password)
+    if problems:
+        raise HTTPException(400, "Password mein ye chahiye: " + ", ".join(problems))
     ensure_admin()
     if mdb().users.find_one({"email": email}):
         raise HTTPException(409, "Ye email pehle se registered hai.")

@@ -10,6 +10,8 @@ from pymongo import DESCENDING
 
 from db import mdb
 
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
 router = APIRouter()
 _last_post = {}
 
@@ -46,6 +48,7 @@ class FeedbackIn(BaseModel):
 class StatusIn(BaseModel):
     status: str | None = None
     hidden: bool | None = None
+    verified: bool | None = None
     note: str | None = Field(default=None, max_length=300)
 
 
@@ -94,13 +97,26 @@ def list_reports(cell_id: int, limit: int = 20):
 
 
 @router.post("/api/v1/feedback")
-def add_feedback(f: FeedbackIn, request: Request):
+def add_feedback(f: FeedbackIn, request: Request, user: dict | None = Depends(optional_user)):
     check_rate(request, 5)
-    mdb().feedback.insert_one(
-        {"rating": f.rating, "message": (f.message or "").strip(), "created_at": int(time.time())}
-    )
+    mdb().feedback.insert_one({
+        "rating": f.rating,
+        "message": (f.message or "").strip(),
+        "name": user["name"] if user else "Anonymous",
+        "created_at": int(time.time()),
+    })
     return {"ok": True, "thanks": "Feedback ke liye shukriya!"}
 
+
+@router.get("/api/v1/feedback")
+def list_feedback(limit: int = 30):
+    db = mdb()
+    rows = db.feedback.find().sort("created_at", DESCENDING).limit(min(limit, 100))
+    items = [{"id": str(r["_id"]), "name": r.get("name", "Anonymous"), "rating": r["rating"],
+              "message": r.get("message", ""), "created_at": r["created_at"]} for r in rows]
+    agg = list(db.feedback.aggregate([{"$group": {"_id": None, "n": {"$sum": 1}, "a": {"$avg": "$rating"}}}]))
+    return {"count": agg[0]["n"] if agg else 0,
+            "avg": round(agg[0]["a"], 2) if agg else None, "items": items}
 
 @router.get("/api/v1/admin/reports")
 def admin_reports(status: str | None = None, kind: str | None = None,
@@ -125,6 +141,8 @@ def admin_update(rid: str, body: StatusIn, admin: dict = Depends(require_admin))
         upd["hidden"] = body.hidden
     if body.note is not None:
         upd["note"] = body.note
+    if body.verified is not None:
+        upd["verified"] = body.verified
     if not upd:
         raise HTTPException(400, "Kuch badalne ko nahi diya.")
     res = mdb().reports.update_one({"_id": ObjectId(rid)}, {"$set": upd})
@@ -163,3 +181,27 @@ def admin_summary(admin: dict = Depends(require_admin)):
         "feedback_count": fb[0]["n"] if fb else 0,
         "feedback_avg": round(fb[0]["a"], 2) if fb else None,
     }
+
+@router.post("/api/v1/admin/export-incidents")
+def export_incidents(admin: dict = Depends(require_admin)):
+    """Verified waterlogging reports se asli incidents CSV banao."""
+    import datetime as dt
+    import pandas as pd
+
+    static = pd.read_csv(os.path.join(ROOT, "ml", "data", "processed", "cell_static_features.csv"))
+    pos = static.set_index("cell_id")[["lat", "lon"]]
+    rows = []
+    seen = set()
+    for r in mdb().reports.find({"verified": True, "kind": "waterlogging"}):
+        d = dt.datetime.fromtimestamp(r["created_at"]).date().isoformat()
+        key = (r["cell_id"], d)
+        if key in seen or r["cell_id"] not in pos.index:
+            continue
+        seen.add(key)
+        rows.append({"date": d, "cell_id": r["cell_id"],
+                     "lat": float(pos.loc[r["cell_id"], "lat"]),
+                     "lon": float(pos.loc[r["cell_id"], "lon"]),
+                     "severity": "reported", "source": "verified_report"})
+    out = os.path.join(ROOT, "ml", "data", "raw", "incidents_real.csv")
+    pd.DataFrame(rows, columns=["date", "cell_id", "lat", "lon", "severity", "source"]).to_csv(out, index=False)
+    return {"saved": len(rows), "path": "ml/data/raw/incidents_real.csv"}
