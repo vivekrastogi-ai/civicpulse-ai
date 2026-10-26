@@ -4,6 +4,7 @@ import sys
 import time
 from datetime import date as _date, timedelta
 from functools import lru_cache
+from fastapi.staticfiles import StaticFiles
 
 import numpy as np
 import pandas as pd
@@ -43,6 +44,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+os.makedirs(os.path.join(ROOT, "backend", "uploads"), exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=os.path.join(ROOT, "backend", "uploads")), name="uploads")
 
 
 from community import router as community_router  # noqa: E402
@@ -95,31 +99,40 @@ def rain_points() -> list:
     return [(float(a), float(c)) for a, c in b.values]
 
 
+_ARCHIVE_CACHE = {}
+
+
 def day_frame(date: str):
-    """Date ke liye (dataframe, mode) lautao. mode = 'observed' ya 'forecast'."""
     ts = pd.Timestamp(date)
     t = get_table()
     day = t[t["date"] == ts]
     if not day.empty:
         return day, "observed"
     today = pd.Timestamp(_date.today())
-    if today - timedelta(days=2) <= ts <= today + timedelta(days=7):
-        try:
+    if ts > today + timedelta(days=15):
+        raise HTTPException(404, "Forecast sirf agle 15 din tak milta hai.")
+    try:
+        if ts >= today - timedelta(days=2):
             daily = get_live_daily(rain_points())
-        except Exception as e:
-            print("Live weather error:", e)
-            raise HTTPException(503, "Live weather abhi nahi mil paya, thodi der baad try karo.")
-        d = daily[daily["date"] == ts]
-        if d.empty:
-            raise HTTPException(404, "Is date ka forecast nahi mila.")
-        df = get_base().merge(
-            d.drop(columns=[]), on=["rain_lat", "rain_lon"], how="left"
-        )
-        df["date"] = ts
-        df["month"] = ts.month
-        df["dayofyear"] = ts.dayofyear
-        df = df.dropna(subset=["rain_mm"]).reset_index(drop=True)
-        return df, "forecast"
+            d = daily[daily["date"] == ts]
+            mode = "forecast"
+        else:
+            if date not in _ARCHIVE_CACHE:
+                from live import fetch_archive_day
+                _ARCHIVE_CACHE[date] = fetch_archive_day(rain_points(), date)
+            d = _ARCHIVE_CACHE[date]
+            mode = "observed_live"
+    except Exception as e:
+        print("Weather error:", e)
+        raise HTTPException(503, "Mausam data abhi nahi mil paya, thodi der baad try karo.")
+    if d.empty:
+        raise HTTPException(404, "Is date ka mausam data nahi mila.")
+    df = get_base().merge(d, on=["rain_lat", "rain_lon"], how="left")
+    df["date"] = ts
+    df["month"] = ts.month
+    df["dayofyear"] = ts.dayofyear
+    df = df.dropna(subset=["rain_mm"]).reset_index(drop=True)
+    return df, mode
     raise HTTPException(
         404,
         "Is date ka data nahi hai. Aaj se 2 din pehle se 7 din aage tak, ya June-Sept 2024 chuno.",
@@ -260,10 +273,9 @@ def risk_map(date: str):
     day, mode = day_frame(date)
     prob, _ = get_model().predict(day)
 
-    hi_cut = np.quantile(prob, 0.97)
-    med_cut = np.quantile(prob, 0.82)
-    level = np.where(prob >= hi_cut, "High",
-                     np.where(prob >= med_cut, "Medium", "Low"))
+    m = get_model()
+    level = np.where(prob >= m.high_thr, "High",
+                     np.where(prob >= m.low_thr, "Medium", "Low"))
 
     out = pd.DataFrame({
         "cell_id": day["cell_id"].values,
@@ -468,3 +480,270 @@ def compare(cell_a: int, cell_b: int, date: str):
     return {"date": date, "mode": mode, "places": out,
             "summary": f"{safer['place_name']} is din relatively kam risk par hai "
                        f"({safer['risk_probability'] * 100:.1f}%). Ye model ka estimate hai."}
+
+
+
+@app.get("/api/v1/model-info")
+def model_info():
+    meta = get_model().meta
+    return {
+        "model_version": meta.get("model_version"),
+        "data": meta.get("data"),
+        "features": meta.get("features"),
+        "test_metrics": meta.get("test_metrics"),
+        "limitations": [
+            "Incidents synthetic hain; model ne generator ke rules seekhe, asli waterlogging ke karan nahi.",
+            "Rainfall resolution ~10 km hai, paas ke cells ek jaisi barish share karte hain.",
+            "Temperature/humidity barish ke proxy hain, karan nahi.",
+            "Live mode mein incident history ka approximation use hota hai.",
+            "Ye prototype hai, emergency warning system nahi.",
+        ],
+    }
+
+
+@app.get("/api/v1/analytics")
+def analytics(date: str, top: int = 10):
+    """Ek din ka overview: top risky areas, distribution, barish."""
+    day, mode = day_frame(date)
+    prob, _ = get_model().predict(day)
+    names = get_names()
+    df = pd.DataFrame({
+        "cell_id": day["cell_id"].values,
+        "place_name": [names.get(c, f"Cell {c}") for c in day["cell_id"].values],
+        "risk_probability": prob,
+        "rain_mm": day["rain_mm"].values.astype(float),
+    })
+    top_df = df.sort_values("risk_probability", ascending=False).head(min(top, 25))
+    buckets = [("<0.5%", 0, 0.005), ("0.5-2%", 0.005, 0.02),
+               ("2-8%", 0.02, 0.08), ("8%+", 0.08, 2)]
+    dist = [{"label": l, "cells": int(((prob >= lo) & (prob < hi)).sum())} for l, lo, hi in buckets]
+    return {
+        "date": date,
+        "mode": mode,
+        "total_cells": int(len(df)),
+        "avg_rain_mm": round(float(df["rain_mm"].mean()), 1),
+        "max_rain_mm": round(float(df["rain_mm"].max()), 1),
+        "max_probability": round(float(prob.max()), 5),
+        "avg_probability": round(float(prob.mean()), 5),
+        "distribution": dist,
+        "top_areas": [
+            {"cell_id": int(r.cell_id), "place_name": r.place_name,
+             "risk_probability": round(float(r.risk_probability), 5),
+             "rain_mm": round(float(r.rain_mm), 1)}
+            for r in top_df.itertuples()
+        ],
+    }
+
+
+@app.get("/api/v1/route")
+def safe_route(from_lat: float, from_lon: float, to_lat: float, to_lon: float, date: str):
+    """A se B ke raaste, har raaste ka risk (model ke hisaab se)."""
+    day, mode = day_frame(date)
+    prob, _ = get_model().predict(day)
+    lats = day["lat"].values.astype(float)
+    lons = day["lon"].values.astype(float)
+    hi_cut = float(np.quantile(prob, 0.97))
+
+    url = f"https://router.project-osrm.org/route/v1/driving/{from_lon},{from_lat};{to_lon},{to_lat}"
+    try:
+        r = requests.get(
+            url,
+            params={"alternatives": "true", "overview": "full", "geometries": "geojson"},
+            timeout=20,
+        )
+        data = r.json()
+    except Exception as e:
+        print("Routing error:", e)
+        raise HTTPException(503, "Routing service abhi nahi mil rahi, thodi der baad try karo.")
+    if data.get("code") != "Ok" or not data.get("routes"):
+        raise HTTPException(404, "In dono jagah ke beech raasta nahi mila.")
+
+    routes = []
+    for rt in data["routes"]:
+        coords = rt["geometry"]["coordinates"]  # [lon, lat]
+        step = max(1, len(coords) // 80)
+        risks = []
+        risky_pts = 0
+        for lon, lat in coords[::step]:
+            d = (lats - lat) ** 2 + ((lons - lon) * 0.88) ** 2
+            i = int(d.argmin())
+            if d[i] <= 0.02 ** 2:
+                p = float(prob[i])
+                risks.append(p)
+                if p >= hi_cut:
+                    risky_pts += 1
+        routes.append({
+            "distance_km": round(rt["distance"] / 1000, 1),
+            "duration_min": round(rt["duration"] / 60),
+            "avg_risk": round(float(np.mean(risks)), 5) if risks else 0.0,
+            "max_risk": round(float(np.max(risks)), 5) if risks else 0.0,
+            "risky_points": risky_pts,
+            "geometry": [[c[1], c[0]] for c in coords[::max(1, len(coords) // 400)]],
+        })
+    safest = min(range(len(routes)), key=lambda k: (routes[k]["avg_risk"], routes[k]["duration_min"]))
+    fastest = min(range(len(routes)), key=lambda k: routes[k]["duration_min"])
+    return {
+        "date": date,
+        "mode": mode,
+        "safest": safest,
+        "fastest": fastest,
+        "routes": routes,
+        "note": "Risk model ka estimate hai (synthetic data par trained). Asli halat ke liye traffic/mausam updates dekho.",
+    }
+
+
+@app.get("/api/v1/stress-test")
+def stress_test(date: str):
+    """Maan lo poori Delhi mein X mm barish ho: kitne cells High honge (us din ki baaki condition wahi)."""
+    day, mode = day_frame(date)
+    model = get_model()
+    thr = float(model.high_thr)
+    out = []
+    for mm in (0, 25, 50, 75, 100, 150):
+        sc = day.copy()
+        sc["rain_mm"] = float(mm)
+        sc["rain_max_1h"] = float(mm) * 0.35
+        sc["rain_prev1d"] = day["rain_prev1d"].astype(float)
+        sc["rain_prev3d"] = day["rain_prev3d"].astype(float) + mm * 0.5
+        p, _ = model.predict(sc)
+        out.append({
+            "rain_mm": mm,
+            "high_cells": int((p >= thr).sum()),
+            "avg_risk": round(float(p.mean()), 5),
+            "max_risk": round(float(p.max()), 5),
+        })
+    return {"date": date, "mode": mode, "total_cells": int(len(day)), "steps": out,
+            "note": "Maan liya gaya hai ki poori Delhi mein itni barish hoti hai. Estimate hai, guarantee nahi."}
+
+
+@app.get("/api/v1/resilience")
+def resilience(cell_id: int):
+    """Barish se alag: ilaake ki apni banawat ka score (0-100, zyada = behtar)."""
+    base = get_base()
+    row = base[base["cell_id"] == cell_id]
+    if row.empty:
+        raise HTTPException(404, "Cell nahi mila.")
+    r = row.iloc[0]
+
+    def pr(col, v, inv=False):
+        x = float((base[col] < v).mean())
+        return 1 - x if inv else x
+
+    parts = {
+        "Unchai (elevation)": pr("elevation", r["elevation"]),
+        "Padosi se unchai": pr("local_relief", r["local_relief"]),
+        "Drain/naale": pr("drain_length_km", r["drain_length_km"]),
+        "Underpass kam": pr("underpass_count", r["underpass_count"], inv=True),
+    }
+    score = round(100 * sum(parts.values()) / len(parts))
+    grade = "Mazboot" if score >= 65 else "Madhyam" if score >= 40 else "Kamzor"
+    return {
+        "cell_id": cell_id,
+        "place_name": get_names().get(cell_id, f"Cell {cell_id}"),
+        "score": score,
+        "grade": grade,
+        "parts": {k: round(v * 100) for k, v in parts.items()},
+        "underpasses": int(r["underpass_count"]),
+        "note": "Ye sirf ilaake ki banawat ka score hai, aaj ki barish ka nahi. Delhi ke baaki cells se tulna par based.",
+    }
+
+
+@app.get("/api/v1/flood-score")
+def flood_score(date: str):
+    """Poori Delhi ka headline score (0-100). Zyada = zyada risk."""
+    day, mode = day_frame(date)
+    m = get_model()
+    prob, _ = m.predict(day)
+    thr = float(m.high_thr)
+    high_share = float((prob >= thr).mean())
+    med_share = float((prob >= m.low_thr).mean())
+    avg = float(prob.mean())
+    score = round(100 * min(1.0, 0.45 * (high_share / 0.15)
+                                 + 0.30 * (med_share / 0.6)
+                                 + 0.25 * (avg / 0.05)))
+    label = "Kam" if score < 15 else "Madhyam" if score < 40 else "Zyada" if score < 70 else "Bahut zyada"
+    avg_rain = float(day["rain_mm"].astype(float).mean())
+    if avg_rain < 1:
+        reason = "Aaj lagbhag barish nahi hai, isliye risk kam hai."
+    elif score < 40:
+        reason = f"Halki barish (avg {avg_rain:.1f} mm), kuch hi jagah risk."
+    else:
+        reason = f"Kaafi barish (avg {avg_rain:.1f} mm), kai jagah paani bharne ka khatra."
+    return {
+        "date": date, "mode": mode, "score": score, "label": label, "reason": reason,
+        "high_cells": int((prob >= thr).sum()),
+        "medium_cells": int(((prob >= m.low_thr) & (prob < thr)).sum()),
+        "total_cells": int(len(prob)),
+        "avg_rain_mm": round(avg_rain, 1),
+        "note": "Ek headline andaza hai, model ke estimate par based.",
+    }
+
+
+@app.get("/api/v1/confidence")
+def confidence(date: str):
+    today = _date.today()
+    d = _date.fromisoformat(date)
+    delta = (d - today).days
+    if delta <= 1:
+        level, why = "High", "Mausam data observed ya 1 din ke andar ka forecast hai."
+    elif delta <= 4:
+        level, why = "Medium", "2-4 din aage ka forecast, barish ki matra badal sakti hai."
+    else:
+        level, why = "Low", "5+ din aage ka forecast kam bharosemand hota hai."
+    return {
+        "date": date, "days_ahead": delta, "level": level, "why": why,
+        "model_note": "Model synthetic data par trained hai, isliye jagah-wise accuracy abhi asli nahi hai.",
+    }
+
+
+@lru_cache(maxsize=1)
+def replay_summary():
+    """2024 June-Sept ka din-wise headline (ek baar compute, phir cache)."""
+    t = get_table()
+    m = get_model()
+    out = []
+    for d, grp in t.groupby("date"):
+        prob, _ = m.predict(grp)
+        high = float((prob >= m.high_thr).mean())
+        med = float((prob >= m.low_thr).mean())
+        avg = float(prob.mean())
+        score = round(100 * min(1.0, 0.45 * (high / 0.15) + 0.30 * (med / 0.6) + 0.25 * (avg / 0.05)))
+        out.append({
+            "date": d.date().isoformat(),
+            "score": score,
+            "high_cells": int((prob >= m.high_thr).sum()),
+            "avg_rain_mm": round(float(grp["rain_mm"].astype(float).mean()), 1),
+        })
+    return out
+
+
+@app.get("/api/v1/replay")
+def replay():
+    return {"days": replay_summary(),
+            "note": "2024 monsoon (June-Sept) ka din-wise model estimate."}
+
+
+@app.get("/api/v1/reminder-check")
+def reminder_check(cell_id: int, date: str, time_hhmm: str = "10:00"):
+    """Ek jagah ke liye alert: risk, barish aur kab nikalna chahiye."""
+    row, mode = one_row(cell_id, date)
+    info = get_model().explain(row, top_n=2)
+    p = info["risk_probability"]
+    rain = float(row["rain_mm"].iloc[0])
+    lvl = info["risk_level"]
+    h, m = map(int, time_hhmm.split(":"))
+    leave_by = f"{(h * 60 + m - 30) // 60:02d}:{(h * 60 + m - 30) % 60:02d}"
+    if lvl == "Low":
+        msg = "Is jagah par aaj risk kam hai. Normal nikal sakte ho."
+        alert = False
+    else:
+        msg = (f"Aaj {time_hhmm} par risk {lvl} hai ({p * 100:.1f}%, barish {rain:.1f} mm). "
+               f"{leave_by} tak nikal jao ya Safe Route dekho.")
+        alert = True
+    return {"alert": alert, "level": lvl, "risk_probability": p, "rain_mm": round(rain, 1),
+            "leave_by": leave_by, "message": msg, "confidence_mode": mode}
+
+@app.on_event("startup")
+def _start_notifier():
+    import notifier
+    notifier.start(lambda cid, d, t: reminder_check(cid, d, t))

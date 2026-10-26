@@ -29,13 +29,13 @@ export default function Timeline({ cellId }: { cellId: number }) {
       {!loading && days.length === 0 && <p className="text-xs text-slate-400">Forecast abhi nahi mila.</p>}
       <div className="flex h-28 items-end gap-1">
         {days.map((d) => {
-          const h = Math.max(4, (d.risk_probability / maxP) * 100);
+          const h = Math.max(4, (d.risk_probability / maxP) * 90);
           const color =
             d.risk_probability >= 0.08 ? "bg-red-500" : d.risk_probability >= 0.02 ? "bg-amber-500" : "bg-emerald-500";
           return (
             <div key={d.date} className="flex flex-1 flex-col items-center justify-end" title={`${d.date}: ${pct(d.risk_probability)}, barish ${d.rain_mm} mm`}>
               <div className="mb-1 text-[9px] text-slate-300">{pct(d.risk_probability)}</div>
-              <div className={`w-full rounded-t ${color}`} style={{ height: `${h}%` }} />
+              <div className={`w-full rounded-t ${color}`} style={{ height: `${h}px` }} />
             </div>
           );
         })}

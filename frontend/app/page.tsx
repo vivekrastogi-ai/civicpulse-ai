@@ -5,7 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Community from "./components/Community";
+import UserMenu from "./components/UserMenu";
+import Compare from "./components/Compare";
+import Confidence from "./components/Confidence";
+import ReminderWatcher from "./components/ReminderWatcher";
+import Highlights from "./components/Highlights";
 import Timeline from "./components/Timeline";
+import FloodScore from "./components/FloodScore";
+import Insights from "./components/Insights";
 import type { Cell, Focus } from "./components/RiskMap";
 import { API, api, authHeaders, clearSession, getUser, setSession, type User } from "./lib/api";
 
@@ -241,12 +248,15 @@ export default function Home() {
   const [searching, setSearching] = useState(false);
   const [searchMsg, setSearchMsg] = useState("");
   const [focus, setFocus] = useState<Focus>(null);
+  const [heat, setHeat] = useState(false);
 
   const [reports, setReports] = useState<Report[]>([]);
   const [rKind, setRKind] = useState("waterlogging");
   const [rText, setRText] = useState("");
   const [rMsg, setRMsg] = useState("");
+  const [rPhoto, setRPhoto] = useState<File | null>(null);
 
+  
   const [fbOpen, setFbOpen] = useState(false);
   const [fbRating, setFbRating] = useState(0);
   const [fbText, setFbText] = useState("");
@@ -408,6 +418,12 @@ export default function Home() {
     setSelected(id);
   };
 
+  const openArea = (a: { cell_id: number; place_name: string }) => {
+    const c = cells.find((x) => x.cell_id === a.cell_id);
+    if (c) setFocus({ lat: c.lat, lon: c.lon, name: a.place_name });
+    setSelected(a.cell_id);
+  };
+
   const ask = () => {
     const q = question.trim();
     if (!q || selected === null || asking) return;
@@ -425,27 +441,40 @@ export default function Home() {
       .finally(() => setAsking(false));
   };
 
-  const postReport = () => {
+  const postReport = async () => {
     if (selected === null || rText.trim().length < 3) {
       setRMsg("Kam se kam 3 akshar likho.");
       return;
     }
-    fetch(`${API}/api/v1/reports`, {
-      method: "POST",
-      headers: authHeaders(),
-      body: JSON.stringify({ cell_id: selected, place_name: placeName || null, kind: rKind, text: rText }),
-    })
-      .then(async (r) => {
-        const d = await r.json();
-        if (!r.ok) throw new Error(typeof d.detail === "string" ? d.detail : "Report nahi gaya");
-        return d as Report;
-      })
-      .then((d) => {
-        setReports((x) => [d, ...x]);
-        setRText("");
-        setRMsg("Report jud gaya, shukriya!");
-      })
-      .catch((e) => setRMsg(e.message));
+    try {
+      let photo: string | null = null;
+      if (rPhoto) {
+        const fd = new FormData();
+        fd.append("file", rPhoto);
+        const t = localStorage.getItem("cp_token");
+        const up = await fetch(`${API}/api/v1/uploads`, {
+          method: "POST",
+          headers: t ? { Authorization: `Bearer ${t}` } : {},
+          body: fd,
+        });
+        const uj = await up.json();
+        if (!up.ok) throw new Error(typeof uj.detail === "string" ? uj.detail : "Photo upload nahi hui");
+        photo = uj.url;
+      }
+      const r = await fetch(`${API}/api/v1/reports`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ cell_id: selected, place_name: placeName || null, kind: rKind, text: rText, photo }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(typeof d.detail === "string" ? d.detail : "Report nahi gaya");
+      setReports((x) => [d, ...x]);
+      setRText("");
+      setRPhoto(null);
+      setRMsg("Report jud gaya, shukriya!");
+    } catch (e) {
+      setRMsg((e as Error).message);
+    }
   };
 
   const sendFeedback = () => {
@@ -553,20 +582,7 @@ export default function Home() {
           )}
         </div>
 
-        <div className="flex items-center gap-2 text-xs">
-          <button onClick={() => setShowTour(true)} className="rounded-full bg-white/10 px-3 py-1 hover:bg-white/20">
-            ? Guide
-          </button>
-          {user?.role === "admin" && (
-            <Link href="/admin" className="rounded-full bg-amber-500/20 px-3 py-1 text-amber-300 hover:bg-amber-500/30">
-              Admin
-            </Link>
-          )}
-          <span className="hidden text-slate-400 md:inline">{user?.name}</span>
-          <button onClick={logout} className="rounded-full bg-white/10 px-3 py-1 hover:bg-red-500/30">
-            Logout
-          </button>
-        </div>
+        <UserMenu onGuide={() => setShowTour(true)} />
       </header>
 
       <div id="tour-status" className="flex flex-wrap items-center gap-3 border-b border-white/5 bg-slate-900/50 px-4 py-1.5 text-xs">
@@ -582,15 +598,25 @@ export default function Home() {
         <span className="text-red-400">High: {summary.High ?? 0}</span>
         <span className="text-amber-400">Medium: {summary.Medium ?? 0}</span>
         <span className="text-emerald-400">Low: {summary.Low ?? 0}</span>
+        <Confidence date={date} />
         {loading && <span className="text-sky-300">Loading... (live data pehli baar 1 min le sakta hai)</span>}
         {error && <span className="text-red-300">{error}</span>}
       </div>
 
+      <div className="border-b border-white/5 bg-slate-900/40 px-4 py-2">
+        <FloodScore date={date} />
+      </div>  
       <div className="flex min-h-0 flex-1">
         <div id="tour-map" className="relative flex-1">
-          <RiskMap cells={cells} selected={selected} onSelect={onMapSelect} focus={focus} />
+          <RiskMap cells={cells} selected={selected} onSelect={onMapSelect} focus={focus} heat={heat} />
+          <button
+            onClick={() => setHeat((h) => !h)}
+            className="absolute right-4 top-4 z-[500] rounded-full border border-white/10 bg-slate-900/80 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-slate-800"
+          >
+            {heat ? "Circles dikhao" : "Heatmap dikhao"}
+          </button>
           <div id="tour-legend" className="absolute bottom-4 left-4 z-[500] rounded-xl border border-white/10 bg-slate-900/80 px-3 py-2 text-xs backdrop-blur">
-            <div className="mb-1 font-semibold text-slate-200">Risk (us din ke hisaab se)</div>
+            <div className="mb-1 font-semibold text-slate-200">Risk level</div>
             <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-red-500" /> High</div>
             <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-amber-500" /> Medium</div>
             <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> Low</div>
@@ -655,6 +681,14 @@ export default function Home() {
                 )}
               </div>
               <Timeline cellId={selected as number} />
+                            <Insights
+                cellId={selected as number}
+                placeName={placeName}
+                riskPct={expl.risk_probability < 0.001 ? "<0.1%" : `${(expl.risk_probability * 100).toFixed(1)}%`}
+                level={expl.risk_level}
+                date={date}
+              />
+              <Compare date={date} current={selected !== null ? { cell_id: selected, place_name: placeName } : null} />
 
               <div className={card}>
                 <div className="mb-2 text-sm font-semibold">Mukhya wajah</div>
@@ -687,6 +721,15 @@ export default function Home() {
                 <p className="mb-2 text-[11px] text-slate-400">
                   Ye logon ke comments hain, verified nahi. Inhe sarkari alert na samjhein.
                 </p>
+                                <div className={`mb-2 rounded-lg px-2 py-1 text-[11px] ${
+                  expl.risk_level === "High" ? "bg-red-500/15 text-red-300"
+                  : expl.risk_level === "Medium" ? "bg-amber-500/15 text-amber-300"
+                  : "bg-emerald-500/15 text-emerald-300"}`}>
+                  AI cross-check: model is din {expl.risk_level} risk bata raha hai ({pct(expl.risk_probability)}).
+                  {reports.some((r) => r.kind === "waterlogging") && expl.risk_level === "Low"
+                    ? " Logon ki report aur model alag hain, jaanch zaroori."
+                    : ""}
+                </div>
                 <div className="mb-3 max-h-48 space-y-2 overflow-y-auto">
                   {reports.length === 0 && <p className="text-xs text-slate-400">Abhi koi report nahi. Pehla report aap daalo!</p>}
                   {reports.map((r) => (
@@ -725,7 +768,18 @@ export default function Home() {
                   rows={2}
                   placeholder="Yahan kya ho raha hai? (jaise: underpass mein ghutne tak paani)"
                   className="mb-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-slate-100 placeholder-slate-500 outline-none"
+                  
                 />
+                                <label className="mb-2 flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-white/20 bg-white/5 px-3 py-2 text-xs text-slate-300 hover:bg-white/10">
+                  📷 {rPhoto ? rPhoto.name : "Photo jodo (optional, JPG/PNG, 3 MB tak)"}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={(e) => setRPhoto(e.target.files?.[0] ?? null)}
+                  />
+                </label>
+                
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] text-slate-400">Aap {user?.name} ke naam se report karoge</span>
                   <button onClick={postReport} className="rounded-lg bg-violet-500 px-3 py-1.5 font-semibold text-white hover:bg-violet-400">
@@ -844,6 +898,7 @@ export default function Home() {
 
             {showTour && <Tour onDone={finishTour} />}
     </div>
+    <Highlights onOpenArea={openArea} />
     <Community user={user} />
     </>
   );
