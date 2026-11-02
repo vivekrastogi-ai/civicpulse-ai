@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "../components/NavBar";
-import { API, getUser } from "../lib/api";
+import { API, authHeaders, getUser } from "../lib/api";
+
 
 type Step = { rain_mm: number; high_cells: number; avg_risk: number; max_risk: number };
 type Data = { date: string; mode: string; total_cells: number; steps: Step[]; note: string };
@@ -29,7 +30,9 @@ export default function Stress() {
     setLoading(true);
     setErr("");
     setD(null);
-    fetch(`${API}/api/v1/stress-test?date=${date}`)
+    fetch(`${API}/api/v1/stress-test?date=${date}`, {
+    headers: authHeaders()
+    })
       .then(async (r) => {
         const j = await r.json();
         if (!r.ok) throw new Error(j.detail || "Data nahi mila");
@@ -71,7 +74,18 @@ export default function Stress() {
           Agar Delhi mein itni barish ho (0 se 150 mm), toh us din ki baaki condition ke saath kitne cells High-risk mein aayenge?
         </p>
         {loading && <p className="text-sky-300">Calculate ho raha hai... (10-20 second)</p>}
-        {err && <div className="rounded-lg bg-red-500/15 p-3 text-sm text-red-300">{err}</div>}
+        
+        {err && (
+  <div>
+    <p>{err}</p>
+    {err.includes("Premium") && (
+      <a href="/premium" className="underline">
+        Premium lo
+      </a>
+    )}
+  </div>
+)}
+
         {d && (
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
             <div className="flex h-64 items-end gap-3">

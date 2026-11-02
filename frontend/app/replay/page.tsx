@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "../components/NavBar";
-import { API, getUser } from "../lib/api";
+import { API, authHeaders, getUser } from "../lib/api";
 import type { Cell } from "../components/RiskMap";
 
 const RiskMap = dynamic(() => import("../components/RiskMap"), { ssr: false });
@@ -29,7 +29,9 @@ export default function Replay() {
       router.replace("/login");
       return;
     }
-    fetch(`${API}/api/v1/replay`)
+    fetch(`${API}/api/v1/replay`, {
+  headers: authHeaders()
+})
       .then((r) => r.json())
       .then((d) => {
         const ds: Day[] = d.days ?? [];
@@ -89,7 +91,17 @@ export default function Replay() {
           <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-slate-300">Model ka estimate</span>
         </div>
         {loading && <p className="text-sky-300">Load ho raha hai... (pehli baar 1 minute lag sakta hai)</p>}
-        {err && <div className="rounded-lg bg-red-500/15 p-3 text-sm text-red-300">{err}</div>}
+        
+        {err && (
+  <div>
+    <p>{err}</p>
+    {err.includes("Premium") && (
+      <a href="/premium" className="underline">
+        Premium lo
+      </a>
+    )}
+  </div>
+)}
 
         {cur && (
           <>

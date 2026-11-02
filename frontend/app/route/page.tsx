@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "../components/NavBar";
-import { API, getUser } from "../lib/api";
+import { API, authHeaders, getUser } from "../lib/api";
 import type { RouteLine } from "../components/RouteMap";
 
 const RouteMap = dynamic(() => import("../components/RouteMap"), { ssr: false });
@@ -108,7 +108,9 @@ export default function RoutePage() {
       to_lon: String(b.lon),
       date,
     });
-    fetch(`${API}/api/v1/route?${qs}`)
+    fetch(`${API}/api/v1/route?${qs}`, {
+    headers: authHeaders()
+    })
       .then(async (r) => {
         const d = await r.json();
         if (!r.ok) throw new Error(typeof d.detail === "string" ? d.detail : "Raasta nahi mila");
@@ -155,7 +157,18 @@ export default function RoutePage() {
             </button>
           </div>
         </div>
-        {err && <div className="rounded-lg bg-red-500/15 p-3 text-sm text-red-300">{err}</div>}
+        
+        {err && (
+
+  <div className="rounded-lg bg-red-500/15 p-3 text-sm text-red-300">
+    <p>{err}</p>
+    {err.includes("Premium") && (
+      <a href="/premium" className="mt-2 inline-block underline">
+        Premium lo 👑
+      </a>
+    )}
+  </div>
+)}
 
         <div className="h-[28rem] overflow-hidden rounded-2xl border border-white/10">
           <RouteMap lines={lines} from={a} to={b} />

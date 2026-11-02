@@ -6,6 +6,8 @@ export type User = {
   email: string;
   role: "user" | "admin";
   tour_done: boolean;
+  premium?: boolean;
+  premium_until?: number;
 };
 
 export const getToken = (): string | null =>

@@ -10,7 +10,7 @@ from bson import ObjectId
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 
-from db import mdb
+from backend.app.db import mdb
 
 router = APIRouter()
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -45,9 +45,7 @@ def make_token(user: dict) -> str:
     return jwt.encode(payload, secret(), algorithm="HS256")
 
 
-def public(user: dict) -> dict:
-    return {"id": str(user["_id"]), "name": user["name"], "email": user["email"],
-            "role": user["role"], "tour_done": user.get("tour_done", False)}
+
 
 
 def ensure_admin():
@@ -73,6 +71,23 @@ def current_user(authorization: str | None = Header(default=None)) -> dict:
     if not user:
         raise HTTPException(401, "User nahi mila.")
     return user
+
+def is_premium(u: dict) -> bool:
+    return u.get("role") == "admin" or float(u.get("premium_until", 0)) > time.time()
+
+
+def require_premium(user: dict = Depends(current_user)) -> dict:
+    if not is_premium(user):
+        raise HTTPException(402, "Ye Premium feature hai. Upgrade karke use karo.")
+    return user
+
+
+def public(user: dict) -> dict:
+    return {"id": str(user["_id"]), "name": user["name"], "email": user["email"],
+            "role": user["role"], "tour_done": user.get("tour_done", False),
+            "premium": is_premium(user), "premium_until": int(user.get("premium_until", 0))}
+
+
 
 def optional_user(authorization: str | None = Header(default=None)):
     """Login ho toh user, nahi toh None (anonymous bhi report kar sake)."""
@@ -148,3 +163,54 @@ def me(user: dict = Depends(current_user)):
 def tour_done(user: dict = Depends(current_user)):
     mdb().users.update_one({"_id": user["_id"]}, {"$set": {"tour_done": True}})
     return {"ok": True}
+
+class ProfileIn(BaseModel):
+    name: str | None = Field(default=None, min_length=2, max_length=60)
+    bio: str | None = Field(default=None, max_length=300)
+    city: str | None = Field(default=None, max_length=60)
+    phone: str | None = Field(default=None, max_length=20)
+    linkedin: str | None = Field(default=None, max_length=200)
+    github: str | None = Field(default=None, max_length=200)
+    avatar: str | None = Field(default=None, max_length=100)
+
+
+def full_profile(u: dict) -> dict:
+    db = mdb()
+    uid = str(u["_id"])
+    out = {
+        "id": uid, "name": u["name"], "email": u["email"], "role": u["role"],
+        "provider": u.get("provider", "email"), "bio": u.get("bio", ""), "city": u.get("city", ""),
+        "phone": u.get("phone", ""), "linkedin": u.get("linkedin", ""), "github": u.get("github", ""),
+        "avatar": u.get("avatar"), "joined": u.get("created_at", 0),
+    }
+    out["reports"] = db.reports.count_documents({"user_id": uid})
+    out["verified"] = db.reports.count_documents({"user_id": uid, "verified": True})
+    if u["role"] == "admin":
+        out["resolved_total"] = db.reports.count_documents({"status": "resolved"})
+        out["open_total"] = db.reports.count_documents({"status": {"$ne": "resolved"}})
+    return out
+
+
+@router.get("/api/v1/profile")
+def get_profile(user: dict = Depends(current_user)):
+    return full_profile(user)
+
+
+@router.put("/api/v1/profile")
+def update_profile(b: ProfileIn, user: dict = Depends(current_user)):
+    upd = {}
+    for k, v in b.model_dump(exclude_unset=True).items():
+        if v is None:
+            continue
+        v = v.strip()
+        if k in ("linkedin", "github") and v and not v.startswith("https://"):
+            raise HTTPException(400, f"{k} link https:// se shuru hona chahiye.")
+        if k == "avatar" and v:
+            name = v.replace("/uploads/", "")
+            if not mdb().uploads.find_one({"name": name, "user_id": str(user["_id"])}):
+                raise HTTPException(400, "Photo galat hai, dobara upload karo.")
+        upd[k] = v
+    if upd:
+        mdb().users.update_one({"_id": user["_id"]}, {"$set": upd})
+    return full_profile(mdb().users.find_one({"_id": user["_id"]}))
+    

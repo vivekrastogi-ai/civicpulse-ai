@@ -67,26 +67,18 @@ const addDays = (n: number) => {
 const pct = (p: number) => (p < 0.001 ? "<0.1%" : `${(p * 100).toFixed(1)}%`);
 
 /* ---------- awaaz ---------- */
-function speak(roman: string, devanagari: string) {
+function speak(text: string) {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   const synth = window.speechSynthesis;
   synth.cancel();
-  const hi = synth.getVoices().find((v) => v.lang.toLowerCase().startsWith("hi"));
-  const u = new SpeechSynthesisUtterance(hi ? devanagari : roman);
-  if (hi) {
-    u.voice = hi;
-    u.lang = "hi-IN";
-  } else {
-    u.lang = "en-IN";
-  }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-IN";
   u.rate = 0.95;
   synth.speak(u);
 }
 
 const WELCOME_ROMAN =
-  "Namaste! CivicPulse AI mein aapka swagat hai. Main aapko Delhi mein paani bharne ka khatra pehle se samajhne mein madad karunga. Aap kisi bhi jagah ka risk dekh sakte hain, savdhaniyan jaan sakte hain, aur logon ke reports bhi padh sakte hain. Chaliye shuru karte hain.";
-const WELCOME_DEV =
-  "नमस्ते! सिविकपल्स ए आई में आपका स्वागत है। मैं आपको दिल्ली में पानी भरने का खतरा पहले से समझने में मदद करूंगा। आप किसी भी जगह का रिस्क देख सकते हैं, सावधानियां जान सकते हैं, और लोगों के रिपोर्ट भी पढ़ सकते हैं। चलिए शुरू करते हैं।";
+  "Hello! Welcome to CivicPulse AI. I will help you understand waterlogging risk in Delhi before it happens. You can check any place, read precautions, and see community reports. Let's get started.";
 
 /* ---------- guided tour ---------- */
 const TOUR = [
@@ -288,7 +280,7 @@ export default function Home() {
   }, [router]);
 
   const startWelcome = () => {
-    speak(WELCOME_ROMAN, WELCOME_DEV);
+    speak(WELCOME_ROMAN);
     sessionStorage.setItem("cp_welcomed", "1");
     setShowWelcome(false);
     if (user && !user.tour_done) setShowTour(true);
@@ -399,10 +391,10 @@ export default function Home() {
     fetch(`${API}/api/v1/search?q=${encodeURIComponent(q)}`)
       .then((r) => r.json())
       .then((d: Hit[]) => {
-        if (!d.length) setSearchMsg("Delhi mein ye jagah nahi mili");
+        if (!d.length) setSearchMsg("Place not found in Delhi");
         setHits(d);
       })
-      .catch(() => setSearchMsg("Search nahi ho paya"))
+      .catch(() => setSearchMsg("Search failed"))
       .finally(() => setSearching(false));
   };
 
@@ -437,13 +429,13 @@ export default function Home() {
     })
       .then((r) => r.json())
       .then((d) => setChat((c) => [...c, { role: "bot", text: d.answer, source: d.source }]))
-      .catch(() => setChat((c) => [...c, { role: "bot", text: "Server se jawab nahi aaya." }]))
+      .catch(() => setChat((c) => [...c, { role: "bot", text: "No response from the server." }]))
       .finally(() => setAsking(false));
   };
 
   const postReport = async () => {
     if (selected === null || rText.trim().length < 3) {
-      setRMsg("Kam se kam 3 akshar likho.");
+      setRMsg("Write at least 3 characters.");
       return;
     }
     try {
@@ -471,7 +463,7 @@ export default function Home() {
       setReports((x) => [d, ...x]);
       setRText("");
       setRPhoto(null);
-      setRMsg("Report jud gaya, shukriya!");
+      setRMsg("Report added, thank you!");
     } catch (e) {
       setRMsg((e as Error).message);
     }
@@ -505,17 +497,17 @@ export default function Home() {
   };
 
   const quick = [
-    { label: "Kal se pehle", d: addDays(-1) },
-    { label: "Aaj", d: addDays(0) },
-    { label: "Kal", d: addDays(1) },
-    { label: "+2 din", d: addDays(2) },
-    { label: "+3 din", d: addDays(3) },
+    { label: "Yesterday", d: addDays(-1) },
+    { label: "Today", d: addDays(0) },
+    { label: "Tomorrow", d: addDays(1) },
+    { label: "+2 days", d: addDays(2) },
+    { label: "+3 days", d: addDays(3) },
     { label: "2024 demo", d: "2024-09-13" },
   ];
 
   if (!ready) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-300">Load ho raha hai...</div>
+      <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-300">Loading...</div>
     );
   }
 
@@ -556,7 +548,7 @@ export default function Home() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && doSearch()}
-              placeholder="Delhi mein jagah dhundho (jaise East Azad Nagar)"
+              placeholder="Search a place in Delhi (e.g. East Azad Nagar)"
               className="w-72 rounded-full border border-white/10 bg-white/10 px-4 py-1.5 text-sm text-white placeholder-slate-400 outline-none focus:border-sky-400"
             />
             <button
@@ -581,6 +573,12 @@ export default function Home() {
             </div>
           )}
         </div>
+        <Link
+          href="/premium"
+          className="rounded-full bg-gradient-to-r from-amber-400 to-rose-400 px-4 py-1.5 text-xs font-bold text-slate-900 shadow-lg shadow-amber-500/30 hover:scale-105"
+        >
+          👑 Premium
+        </Link>
 
         <UserMenu onGuide={() => setShowTour(true)} />
       </header>
@@ -599,7 +597,7 @@ export default function Home() {
         <span className="text-amber-400">Medium: {summary.Medium ?? 0}</span>
         <span className="text-emerald-400">Low: {summary.Low ?? 0}</span>
         <Confidence date={date} />
-        {loading && <span className="text-sky-300">Loading... (live data pehli baar 1 min le sakta hai)</span>}
+        {loading && <span className="text-sky-300">Loading... (live data can take up to 1 min the first time)</span>}
         {error && <span className="text-red-300">{error}</span>}
       </div>
 
@@ -613,7 +611,7 @@ export default function Home() {
             onClick={() => setHeat((h) => !h)}
             className="absolute right-4 top-4 z-[500] rounded-full border border-white/10 bg-slate-900/80 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-slate-800"
           >
-            {heat ? "Circles dikhao" : "Heatmap dikhao"}
+            {heat ? "Show circles" : "Show heatmap"}
           </button>
           <div id="tour-legend" className="absolute bottom-4 left-4 z-[500] rounded-xl border border-white/10 bg-slate-900/80 px-3 py-2 text-xs backdrop-blur">
             <div className="mb-1 font-semibold text-slate-200">Risk level</div>
@@ -626,10 +624,9 @@ export default function Home() {
         <aside id="tour-aside" className="w-[26rem] space-y-3 overflow-y-auto border-l border-white/10 bg-slate-900/70 p-4 backdrop-blur">
           {!expl ? (
             <div className={card}>
-              <div className="mb-1 text-lg font-bold">Shuru karein</div>
+              <div className="mb-1 text-lg font-bold">Get started</div>
               <p className="text-sm text-slate-400">
-                Map par kisi circle par click karo, ya upar search box mein Delhi ki koi jagah likho. Uska risk,
-                wajah, savdhaniyan aur logon ke reports yahan dikhenge.
+                Click a circle on the map or search a place in Delhi above. Its risk, reasons, precautions and community reports will appear here.
               </p>
             </div>
           ) : (
@@ -646,7 +643,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm">
-                <div className="mb-2 font-semibold text-amber-300">Savdhaniyan (kya karein)</div>
+                <div className="mb-2 font-semibold text-amber-300">Precautions (what to do)</div>
                 <ul className="list-disc space-y-1 pl-5 text-slate-200">
                   {expl.precautions.map((t, i) => (
                     <li key={i}>{t}</li>
@@ -655,7 +652,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm">
-                <div className="font-semibold text-sky-300">What-if: barish badlo</div>
+                <div className="font-semibold text-sky-300">What-if: change the rainfall</div>
                 <input
                   type="range"
                   min={0}
@@ -665,11 +662,11 @@ export default function Home() {
                   onChange={(e) => setMult(parseFloat(e.target.value))}
                   className="my-2 w-full accent-sky-400"
                 />
-                <div>Barish: {mult}x</div>
+                <div>Rain: {mult}x</div>
                 {sim ? (
                   <div className="mt-2 space-y-1">
                     <div>
-                      Barish: {sim.original_rain_mm.toFixed(1)} mm → <b>{sim.scenario_rain_mm.toFixed(1)} mm</b>
+                      Rain: {sim.original_rain_mm.toFixed(1)} mm → <b>{sim.scenario_rain_mm.toFixed(1)} mm</b>
                     </div>
                     <div>
                       Risk: {pct(sim.original_probability)} → <b>{pct(sim.scenario_probability)}</b>
@@ -677,7 +674,7 @@ export default function Home() {
                     <p className="text-xs text-slate-400">{sim.disclaimer}</p>
                   </div>
                 ) : (
-                  <p className="text-xs text-slate-400">Slider hilao, naya risk yahan dikhega.</p>
+                  <p className="text-xs text-slate-400">Move the slider to see the new risk here.</p>
                 )}
               </div>
               <Timeline cellId={selected as number} />
@@ -691,7 +688,7 @@ export default function Home() {
               <Compare date={date} current={selected !== null ? { cell_id: selected, place_name: placeName } : null} />
 
               <div className={card}>
-                <div className="mb-2 text-sm font-semibold">Mukhya wajah</div>
+                <div className="mb-2 text-sm font-semibold">Rain:Key factors</div>
                 <ul className="space-y-2 text-sm">
                   {expl.top_factors.map((f) => {
                     const up = f.direction === "increases_risk";
@@ -717,9 +714,9 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl border border-violet-400/20 bg-violet-400/5 p-4 text-sm">
-                <div className="mb-1 font-semibold text-violet-300">Logon ke reports ({placeName})</div>
+                <div className="mb-1 font-semibold text-violet-300">Community reports ({placeName})</div>
                 <p className="mb-2 text-[11px] text-slate-400">
-                  Ye logon ke comments hain, verified nahi. Inhe sarkari alert na samjhein.
+                  These are community comments and are unverified. Do not treat them as official alerts.
                 </p>
                                 <div className={`mb-2 rounded-lg px-2 py-1 text-[11px] ${
                   expl.risk_level === "High" ? "bg-red-500/15 text-red-300"
@@ -731,7 +728,7 @@ export default function Home() {
                     : ""}
                 </div>
                 <div className="mb-3 max-h-48 space-y-2 overflow-y-auto">
-                  {reports.length === 0 && <p className="text-xs text-slate-400">Abhi koi report nahi. Pehla report aap daalo!</p>}
+                  {reports.length === 0 && <p className="text-xs text-slate-400">No reports yet. Be the first to report!</p>}
                   {reports.map((r) => (
                     <div key={r.id} className="rounded-lg bg-white/5 p-2">
                       <div className="mb-1 flex flex-wrap items-center justify-between gap-1">
@@ -766,12 +763,12 @@ export default function Home() {
                   onChange={(e) => setRText(e.target.value)}
                   maxLength={500}
                   rows={2}
-                  placeholder="Yahan kya ho raha hai? (jaise: underpass mein ghutne tak paani)"
+                  placeholder="What is happening here? (e.g. knee-deep water in the underpass)"
                   className="mb-2 w-full rounded-lg bg-white/10 px-2 py-1.5 text-slate-100 placeholder-slate-500 outline-none"
                   
                 />
                                 <label className="mb-2 flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-white/20 bg-white/5 px-3 py-2 text-xs text-slate-300 hover:bg-white/10">
-                  📷 {rPhoto ? rPhoto.name : "Photo jodo (optional, JPG/PNG, 3 MB tak)"}
+                  📷 {rPhoto ? rPhoto.name : "Add a photo (optional, JPG/PNG, up to 3 MB)"}
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -783,7 +780,7 @@ export default function Home() {
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] text-slate-400">Aap {user?.name} ke naam se report karoge</span>
                   <button onClick={postReport} className="rounded-lg bg-violet-500 px-3 py-1.5 font-semibold text-white hover:bg-violet-400">
-                    Report karo
+                    Submit report
                   </button>
                 </div>
                 {rMsg && <div className="mt-1 text-xs text-violet-200">{rMsg}</div>}
@@ -804,18 +801,18 @@ export default function Home() {
                       {m.source && <div className="mt-1 text-[10px] text-slate-500">source: {m.source}</div>}
                     </div>
                   ))}
-                  {asking && <p className="text-xs text-slate-400">Soch raha hoon...</p>}
+                  {asking && <p className="text-xs text-slate-400">Thinking...</p>}
                 </div>
                 <div className="flex gap-2">
                   <input
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && ask()}
-                    placeholder="Apna sawal likho..."
+                    placeholder="Ask your question..."
                     className="min-w-0 flex-1 rounded-lg bg-white/10 px-2 py-1.5 text-slate-100 placeholder-slate-500 outline-none"
                   />
                   <button onClick={ask} disabled={asking} className="rounded-lg bg-fuchsia-500 px-3 py-1.5 font-semibold text-white disabled:opacity-50">
-                    Puchho
+                    Ask
                   </button>
                 </div>
               </div>
@@ -834,7 +831,7 @@ export default function Home() {
           onClick={() => setFbOpen(true)}
           className="rounded-full bg-gradient-to-r from-sky-500 to-violet-500 px-4 py-1 font-semibold text-white"
         >
-          Feedback do
+          Give feedback
         </button>
       </footer>
 
@@ -880,7 +877,7 @@ export default function Home() {
             <h1 className="mt-1 bg-gradient-to-r from-sky-400 to-violet-400 bg-clip-text text-4xl font-extrabold text-transparent">
               CivicPulse AI
             </h1>
-            <p className="mt-1 text-slate-300">mein aapka swagat hai</p>
+            <p className="mt-1 text-slate-300">welcome to</p>
             <p className="mt-4 text-sm text-slate-400">
               Delhi mein paani bharne ka khatra pehle se samjhein. Kisi bhi jagah ka risk dekhein, savdhaniyan jaanein
               aur logon ke reports padhein.

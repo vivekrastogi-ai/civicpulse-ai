@@ -10,30 +10,29 @@ META_PATH = "ml/artifacts/model_meta.json"
 
 # Padhne mein aasan naam (UI/assistant ke liye)
 READABLE = {
-    "rain_mm": "Aaj ki barish",
-    "rain_max_1h": "Sabse tez 1-ghante ki barish",
-    "rain_prev1d": "Kal ki barish",
-    "rain_prev3d": "Pichhle 3 din ki barish",
-    "rain_prev7d": "Pichhle 7 din ki barish",
-    "rain_prev30d": "Pichhle 30 din ki barish",
+    "rain_mm": "Today's rainfall",
+    "rain_max_1h": "Peak 1-hour rainfall",
+    "rain_prev1d": "Yesterday's rainfall",
+    "rain_prev3d": "Rainfall in last 3 days",
+    "rain_prev7d": "Rainfall in last 7 days",
+    "rain_prev30d": "Rainfall in last 30 days",
     "temp_mean": "Temperature",
     "humidity_mean": "Humidity",
-    "wind_mean": "Hawa ki raftaar",
+    "wind_mean": "Wind speed",
     "lat": "Latitude",
     "lon": "Longitude",
-    "elevation": "Unchai (elevation)",
-    "local_relief": "Padosiyon se relative unchai",
-    "road_length_km": "Sadak ki lambai",
-    "drain_length_km": "Nale/drain ki lambai",
-    "tunnel_length_km": "Tunnel/underpass ki lambai",
-    "underpass_count": "Underpass ki ginti",
-    "dist_waterway_km": "Nazdiki nale/nadi se doori",
-    "inc_last30d": "Pichhle 30 din ke incidents",
-    "inc_past_years": "Pichhle saalon ke incidents",
-    "month": "Mahina",
-    "dayofyear": "Saal ka din",
+    "elevation": "Elevation",
+    "local_relief": "Elevation relative to neighbours",
+    "road_length_km": "Road length",
+    "drain_length_km": "Drain length",
+    "tunnel_length_km": "Tunnel/underpass length",
+    "underpass_count": "Underpass count",
+    "dist_waterway_km": "Distance to nearest drain/river",
+    "inc_last30d": "Incidents in last 30 days",
+    "inc_past_years": "Incidents in past years",
+    "month": "Month",
+    "dayofyear": "Day of year",
 }
-
 
 class RiskModel:
     def __init__(self):
@@ -76,6 +75,5 @@ class RiskModel:
             "risk_level": str(level[0]),
             "base_score": round(base, 4),
             "top_factors": factors,
-            "note": "Contribution model ke raw score (log-odds) mein hai, "
-                    "calibrated probability ke percentage points mein nahi.",
+                        "note": "Contribution is in the model's raw score (log-odds), not in percentage points of the calibrated probability.",
         }

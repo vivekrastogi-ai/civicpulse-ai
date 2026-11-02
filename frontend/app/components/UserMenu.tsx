@@ -6,13 +6,15 @@ import { useRouter } from "next/navigation";
 import { clearSession, getUser, type User } from "../lib/api";
 
 const ITEMS = [
+  { href: "/profile", label: "My Profile", icon: "👤" },
   { href: "/", label: "Risk Map", icon: "🗺️" },
+  { href: "/premium", label: "Premium Lab 👑", icon: "👑" },
   { href: "/reminders", label: "Commute Reminder", icon: "⏰" },
   { href: "/replay", label: "Rain Replay", icon: "🎞️" },
   { href: "/stress", label: "Rain Stress Test", icon: "🌧️" },
   { href: "/route", label: "Safe Route", icon: "🧭" },
   { href: "/analytics", label: "Analytics", icon: "📊" },
-  { href: "/my-reports", label: "Meri Reports", icon: "📝" },
+  { href: "/my-reports", label: "My Reports", icon: "📝" },
   { href: "/helpline", label: "Helpline & Guide", icon: "🆘" },
   { href: "/model", label: "Model & Data", icon: "🧠" },
   { href: "/about", label: "About", icon: "ℹ️" },

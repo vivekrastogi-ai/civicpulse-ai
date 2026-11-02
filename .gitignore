@@ -7,3 +7,5 @@ ml/data/raw/
 ml/data/processed/*.parquet
 .ipynb_checkpoints/
 ml/artifacts/*.joblib
+*.parquet
+

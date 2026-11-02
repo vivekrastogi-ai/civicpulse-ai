@@ -21,8 +21,8 @@ type AUser = { id: string; name: string; email: string; role: string; provider: 
 type FB = { id: string; name: string; rating: number; message: string; created_at: number };
 
 const KIND: Record<string, string> = {
-  waterlogging: "Paani bhara hai", drain_blocked: "Naala jam hai", traffic: "Jam / raasta band",
-  all_clear: "Sab theek hai", other: "Anya",
+  waterlogging: "Waterlogged", drain_blocked: "Drain blocked", traffic: "Traffic jam / road closed",
+  all_clear: "All clear", other: "Other",
 };
 const STATUSES = ["new", "forwarded", "in_progress", "resolved"];
 const SLABEL: Record<string, string> = { new: "New", forwarded: "Forwarded", in_progress: "In progress", resolved: "Resolved" };
@@ -37,7 +37,7 @@ const card = "rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur";
 
 const TABS = [
   ["overview", "📊", "Overview"], ["reports", "📝", "Reports"], ["hotspots", "🔥", "Hotspots"],
-  ["users", "👥", "Users"], ["feedback", "💬", "Feedback"],
+  ["users", "👥", "Users"], ["feedback", "💬", "Feedback"], ["premium", "👑", "Premium"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
 
@@ -46,13 +46,13 @@ function suggest(rows: AReport[]): string[] {
   const c = (k: string) => open.filter((r) => r.kind === k).length;
   const users = new Set(open.map((r) => r.user_email).filter(Boolean)).size;
   const out: string[] = [];
-  if (c("drain_blocked") > 0) out.push("Naale/drain jam ki report hai: safai team bhejein aur silt/kachra hatwayein.");
-  if (c("waterlogging") >= 3) out.push("Kai logon ne paani bharne ki report ki: dewatering pump lagwane par vichar karein.");
-  else if (c("waterlogging") > 0) out.push("Paani bharne ki report: mauke par jaanch karwayein aur drain ka flow dekhein.");
-  if (c("traffic") > 0) out.push("Jam/raasta band ki report: traffic police ko batayein, diversion board lagwane par vichar karein.");
-  if (users >= 3) out.push(`${users} alag users ne shikayat ki hai: is jagah ko priority par rakhein.`);
-  if (!out.length) out.push("Abhi koi kholi hui shikayat nahi. Nigrani jaari rakhein.");
-  out.push("Ye sirf suggestions hain, sarkari faisla nahi. Reports verify hone tak pakki nahi hain.");
+  if (c("drain_blocked") > 0) out.push("Drain blockage reported: send a cleaning crew and remove silt/garbage.");
+  if (c("waterlogging") >= 3) out.push("Several waterlogging reports: consider deploying dewatering pumps.");
+  else if (c("waterlogging") > 0) out.push("Waterlogging reported: inspect on site and check drain flow.");
+  if (c("traffic") > 0) out.push("Traffic/road closure reported: inform traffic police and consider diversion boards.");
+  if (users >= 3) out.push(`${users} different users complained: prioritise this location.`);
+  if (!out.length) out.push("No open complaints right now. Keep monitoring.");
+  out.push("These are suggestions only, not an official decision. Reports are unconfirmed until verified.");
   return out;
 }
 
@@ -66,6 +66,20 @@ export default function AdminPage() {
   const [trend, setTrend] = useState<Trend[]>([]);
   const [users, setUsers] = useState<AUser[]>([]);
   const [fbs, setFbs] = useState<FB[]>([]);
+    type PremiumData = {
+    revenue_inr: number; total_payments: number; active_count: number;
+    active: { id: string; name: string; email: string; premium_until: number }[];
+    payments: { order_id: string; payment_id: string | null; name: string; email: string; plan: string; amount_inr: number; paid_at: number }[];
+  };
+  const [prem, setPrem] = useState<PremiumData | null>(null);
+  const [grantEmail, setGrantEmail] = useState("");
+  const [grantDays, setGrantDays] = useState(30);
+  const loadPremium = () => api("/api/v1/admin/premium").then(setPrem).catch((e) => setErr(e.message));
+  const grant = (path: "grant" | "revoke") =>
+    api(`/api/v1/admin/premium/${path}`, { method: "POST", body: JSON.stringify({ email: grantEmail, days: grantDays }) })
+      .then(() => { setMsg(path === "grant" ? "Premium granted." : "Premium revoked."); loadPremium(); })
+      .catch((e) => setErr(e.message));
+  useEffect(() => { if (user && tab === "premium") loadPremium(); }, [user, tab]); // eslint-disable-line react-hooks/exhaustive-deps
   const [fStatus, setFStatus] = useState("");
   const [fKind, setFKind] = useState("");
   const [q, setQ] = useState("");
@@ -187,7 +201,7 @@ export default function AdminPage() {
   const maxKind = Math.max(1, ...Object.values(sum?.by_kind ?? { x: 1 }));
   const toggle = (id: string) => setSel((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 
-  if (!user) return <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-300">Load ho raha hai...</div>;
+  if (!user) return <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-300">Loading...</div>;
 
   return (
     <div className="flex min-h-screen bg-slate-950 text-slate-100">
@@ -208,6 +222,7 @@ export default function AdminPage() {
         </nav>
         <div className="mt-auto space-y-2 text-sm">
           <Link href="/" className="block rounded-xl bg-white/10 px-3 py-2 text-center hover:bg-white/20">🗺️ Risk map</Link>
+          <Link href="/profile" className="block rounded-xl bg-white/10 px-3 py-2 text-center hover:bg-white/20">👤 My Profile</Link>
           <button onClick={() => { clearSession(); router.replace("/login"); }} className="w-full rounded-xl bg-white/10 px-3 py-2 hover:bg-red-500/30">Logout</button>
           <div className="text-center text-[11px] text-slate-500">{user.name}</div>
         </div>
@@ -222,13 +237,13 @@ export default function AdminPage() {
         <h1 className="text-2xl font-extrabold">{TABS.find((t) => t[0] === tab)?.[2]}</h1>
         {err && <div className="rounded-lg bg-red-500/15 p-3 text-sm text-red-300">{err}</div>}
         {msg && <div className="rounded-lg bg-emerald-500/15 p-3 text-sm text-emerald-300">{msg}</div>}
-        {loading && <div className="text-sm text-sky-300">Load ho raha hai...</div>}
+        {loading && <div className="text-sm text-sky-300">Loading...</div>}
 
         {tab === "overview" && (
           <>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               {[
-                ["Kul reports", sum?.total_reports ?? 0, "text-sky-300", "📝"],
+                ["Open (new)", sum?.total_reports ?? 0, "text-sky-300", "📝"],
                 ["Kholi hui (new)", sum?.by_status?.new ?? 0, "text-red-300", "🚨"],
                 ["Registered users", sum?.total_users ?? 0, "text-violet-300", "👥"],
                 ["Feedback rating", sum?.feedback_avg ? `${sum.feedback_avg} ★ (${sum.feedback_count})` : "-", "text-amber-300", "⭐"],
@@ -241,7 +256,7 @@ export default function AdminPage() {
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div className={`${card} lg:col-span-2`}>
-                <div className="mb-3 font-semibold">Pichhle 14 din ki reports</div>
+                <div className="mb-3 font-semibold">Reports in the last 14 days</div>
                 <div className="flex h-40 items-end gap-1">
                   {trend.map((t) => (
                     <div key={t.date} className="flex h-full flex-1 flex-col items-center justify-end" title={`${t.date}: ${t.reports}`}>
@@ -253,7 +268,7 @@ export default function AdminPage() {
                 <div className="mt-1 flex gap-1">{trend.map((t) => (<div key={t.date} className="flex-1 text-center text-[9px] text-slate-500">{t.date.slice(8)}</div>))}</div>
               </div>
               <div className={card}>
-                <div className="mb-3 font-semibold">Status ka hisaab</div>
+                <div className="mb-3 font-semibold">Status breakdown</div>
                 <div className="space-y-3 text-sm">
                   {STATUSES.map((s) => {
                     const n = sum?.by_status?.[s] ?? 0;
@@ -269,7 +284,7 @@ export default function AdminPage() {
               </div>
             </div>
             <div className={card}>
-              <div className="mb-3 font-semibold">Shikayat ka prakaar</div>
+              <div className="mb-3 font-semibold">Report types</div>
               <div className="space-y-2 text-sm">
                 {Object.entries(sum?.by_kind ?? {}).map(([k, n]) => (
                   <div key={k}>
@@ -277,7 +292,7 @@ export default function AdminPage() {
                     <div className="mt-1 h-2 rounded-full bg-white/10"><div className="h-2 rounded-full bg-gradient-to-r from-sky-500 to-violet-500" style={{ width: `${(n / maxKind) * 100}%` }} /></div>
                   </div>
                 ))}
-                {!Object.keys(sum?.by_kind ?? {}).length && <p className="text-slate-400">Abhi koi report nahi.</p>}
+                {!Object.keys(sum?.by_kind ?? {}).length && <p className="text-slate-400">No reports yet.</p>}
               </div>
             </div>
           </>
@@ -286,22 +301,22 @@ export default function AdminPage() {
         {tab === "reports" && (
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Jagah, user ya text se dhundo..."
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by place, user or text..."
                 className="min-w-0 flex-1 rounded-xl bg-white/10 px-4 py-2 text-sm outline-none placeholder-slate-500" />
               <select value={fStatus} onChange={(e) => setFStatus(e.target.value)} className="rounded-xl bg-slate-800 px-2 py-2 text-sm">
-                <option value="">Saare status</option>
+                <option value="">All statuses</option>
                 {STATUSES.map((s) => (<option key={s} value={s}>{SLABEL[s]}</option>))}
               </select>
               <select value={fKind} onChange={(e) => setFKind(e.target.value)} className="rounded-xl bg-slate-800 px-2 py-2 text-sm">
-                <option value="">Saare prakaar</option>
+                <option value="">All types</option>
                 {Object.entries(KIND).map(([k, v]) => (<option key={k} value={k}>{v}</option>))}
               </select>
-              <button onClick={exportIncidents} className="rounded-xl bg-emerald-500/20 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30">Verified export</button>
+              <button onClick={exportIncidents} className="rounded-xl bg-emerald-500/20 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30">Export verified</button>
             </div>
 
             {sel.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 rounded-xl bg-sky-500/10 p-3 text-xs">
-                <b>{sel.length} chuni hui:</b>
+                <b>{sel.length} selected:</b>
                 <button onClick={() => bulk({ verified: true })} className="rounded-lg bg-emerald-500/30 px-3 py-1">Verify</button>
                 <button onClick={() => bulk({ status: "forwarded" })} className="rounded-lg bg-amber-500/30 px-3 py-1">Forward</button>
                 <button onClick={() => bulk({ status: "in_progress" })} className="rounded-lg bg-sky-500/30 px-3 py-1">In progress</button>
@@ -338,7 +353,7 @@ export default function AdminPage() {
                 </div>
               );
             })}
-            {!shown.length && <p className="p-3 text-sm text-slate-400">Koi report nahi mili.</p>}
+            {!shown.length && <p className="p-3 text-sm text-slate-400">No reports found.</p>}
             <p className="text-[11px] text-slate-500">Priority = us jagah ke open reports x2 + paani bharna +3 + verified +2 + new +2 + photo +1. Report par click karke detail aur madad bhejo.</p>
           </div>
         )}
@@ -356,17 +371,17 @@ export default function AdminPage() {
                     </button>
                   );
                 })}
-                {!hot.length && <p className="text-slate-400">Abhi koi hotspot nahi.</p>}
+                {!hot.length && <p className="text-slate-400">No hotspots yet.</p>}
               </div>
             </div>
             <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/5 p-4">
-              <div className="mb-2 font-semibold text-emerald-300">Kya karein (suggestions)</div>
+              <div className="mb-2 font-semibold text-emerald-300">What to do (suggestions)</div>
               {place ? (
                 <>
                   <div className="mb-2 text-sm text-slate-300">{place}</div>
                   <ul className="list-disc space-y-1 pl-5 text-sm text-slate-200">{suggest(placeRows).map((s, i) => (<li key={i}>{s}</li>))}</ul>
                 </>
-              ) : (<p className="text-sm text-slate-400">Kisi hotspot par click karo.</p>)}
+              ) : (<p className="text-sm text-slate-400">Click a hotspot.</p>)}
             </div>
           </div>
         )}
@@ -393,7 +408,7 @@ export default function AdminPage() {
 
         {tab === "feedback" && (
           <div className="grid gap-3 md:grid-cols-2">
-            {fbs.length === 0 && <p className="text-slate-400">Abhi koi feedback nahi.</p>}
+            {fbs.length === 0 && <p className="text-slate-400">No feedback yet.</p>}
             {fbs.map((f) => (
               <div key={f.id} className={card}>
                 <div className="flex justify-between"><b>{f.name}</b><span className="text-amber-400">{"★".repeat(f.rating)}<span className="text-slate-700">{"★".repeat(5 - f.rating)}</span></span></div>
@@ -401,6 +416,68 @@ export default function AdminPage() {
                 <div className="mt-1 text-[11px] text-slate-500">{new Date(f.created_at * 1000).toLocaleString()}</div>
               </div>
             ))}
+          </div>
+        )}
+
+        {tab === "premium" && !prem && !err && <div className="text-sm text-sky-300">Loading...</div>}
+        {tab === "premium" && prem && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-3">
+              {[["Revenue", `₹${prem.revenue_inr}`], ["Payments", prem.total_payments], ["Active premium", prem.active_count]].map(([l, v]) => (
+                <div key={l as string} className={card}>
+                  <div className="text-xs text-slate-400">{l}</div>
+                  <div className="mt-1 text-3xl font-extrabold text-amber-300">{v}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className={card}>
+              <div className="mb-2 font-semibold">Grant or revoke Premium manually</div>
+              <div className="flex flex-wrap gap-2">
+                <input value={grantEmail} onChange={(e) => setGrantEmail(e.target.value)} placeholder="User email"
+                  className="min-w-0 flex-1 rounded-lg bg-white/10 px-3 py-2 text-sm outline-none" />
+                <input type="number" value={grantDays} onChange={(e) => setGrantDays(Number(e.target.value))}
+                  className="w-24 rounded-lg bg-white/10 px-3 py-2 text-sm outline-none" />
+                <button onClick={() => grant("grant")} className="rounded-lg bg-emerald-500/30 px-4 py-2 text-sm">Grant</button>
+                <button onClick={() => grant("revoke")} className="rounded-lg bg-red-500/30 px-4 py-2 text-sm">Revoke</button>
+              </div>
+            </div>
+
+            <div className={card}>
+              <div className="mb-2 font-semibold">Active Premium users</div>
+              <table className="w-full text-left text-sm">
+                <thead className="text-xs text-slate-400"><tr><th className="p-2">Name</th><th className="p-2">Email</th><th className="p-2">Valid until</th></tr></thead>
+                <tbody>
+                  {prem.active.map((u) => (
+                    <tr key={u.id} className="border-t border-white/5">
+                      <td className="p-2">{u.name}</td><td className="p-2 text-slate-400">{u.email}</td>
+                      <td className="p-2">{new Date(u.premium_until * 1000).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {!prem.active.length && <p className="p-2 text-sm text-slate-400">No active Premium users.</p>}
+            </div>
+
+            <div className={card}>
+              <div className="mb-2 font-semibold">Payment history</div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead className="text-xs text-slate-400"><tr><th className="p-2">User</th><th className="p-2">Plan</th><th className="p-2">Amount</th><th className="p-2">Payment ID</th><th className="p-2">Date</th></tr></thead>
+                  <tbody>
+                    {prem.payments.map((p) => (
+                      <tr key={p.order_id} className="border-t border-white/5">
+                        <td className="p-2">{p.name}<div className="text-[11px] text-slate-500">{p.email}</div></td>
+                        <td className="p-2">{p.plan}</td><td className="p-2 font-bold">₹{p.amount_inr}</td>
+                        <td className="p-2 text-xs text-slate-400">{p.payment_id}</td>
+                        <td className="whitespace-nowrap p-2 text-xs text-slate-400">{p.paid_at ? new Date(p.paid_at * 1000).toLocaleString() : "-"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {!prem.payments.length && <p className="p-2 text-sm text-slate-400">No payments yet.</p>}
+              </div>
+            </div>
           </div>
         )}
       </main>
@@ -438,9 +515,9 @@ export default function AdminPage() {
             </div>
 
             <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/5 p-4">
-              <div className="mb-2 font-semibold text-emerald-300">🆘 Nazdiki madad kendra</div>
+              <div className="mb-2 font-semibold text-emerald-300">🆘 Nearby help centers</div>
               <button onClick={findCenters} disabled={cBusy} className="rounded-lg bg-emerald-500 px-4 py-1.5 text-sm font-semibold text-slate-900 disabled:opacity-50">
-                {cBusy && !centers.length ? "Dhundh raha hai..." : "Hospital, police, fire station dhundo"}
+                {cBusy && !centers.length ? "Searching..." : "Find hospitals, police and fire stations"}
               </button>
               {centers.length > 0 && (
                 <>
@@ -460,7 +537,7 @@ export default function AdminPage() {
                     placeholder="User ke liye sandesh (jaise: Paani bhare raaste se bachein, neeche ke kendra se sampark karein)"
                     className="mt-3 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none placeholder-slate-500" />
                   <button onClick={sendHelp} disabled={cBusy} className="mt-2 rounded-lg bg-gradient-to-r from-sky-500 to-violet-500 px-4 py-1.5 text-sm font-semibold disabled:opacity-50">
-                    User ko bhejo
+                    Send to user
                   </button>
                 </>
               )}
