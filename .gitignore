@@ -9,3 +9,9 @@ ml/data/processed/*.parquet
 ml/artifacts/*.joblib
 *.parquet
 
+!ml/artifacts/
+!ml/artifacts/*.joblib
+!ml/artifacts/model_meta.json
+!ml/data/processed/
+!ml/data/processed/*.csv
+!ml/data/processed/training_table_2024.parquet

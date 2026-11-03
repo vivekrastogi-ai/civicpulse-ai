@@ -7,11 +7,9 @@ import requests
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from backend.app.auth import current_user, is_premium
-from backend.app.db import mdb
-from auth import current_user, is_premium, require_admin
-from bson import ObjectId
 
+from auth import current_user, is_premium, require_admin
+from db import mdb
 router = APIRouter()
 
 # Amount paise mein (9900 = Rs 99). Server hi price tay karta hai, client nahi.

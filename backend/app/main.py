@@ -22,7 +22,7 @@ from explain import RiskModel  # noqa: E402
 from live import get_live_daily  # noqa: E402
 from auth import is_premium, optional_user  # noqa: E402
 
-TABLE_PATH = os.path.join(ROOT, "ml", "data", "processed", "training_table.parquet")
+TABLE_PATH = os.path.join(ROOT, "ml", "data", "processed", "training_table_2024.parquet")
 NAMES_PATH = os.path.join(ROOT, "ml", "data", "processed", "cell_names.csv")
 STATIC_PATH = os.path.join(ROOT, "ml", "data", "processed", "cell_static_features.csv")
 RAINMAP_PATH = os.path.join(ROOT, "ml", "data", "processed", "cell_rain_point_map.csv")
@@ -39,9 +39,11 @@ app = FastAPI(
     version="0.3.0",
 )
 
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000").rstrip("/")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[FRONTEND_URL, "http://localhost:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
