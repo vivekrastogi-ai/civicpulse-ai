@@ -47,7 +47,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 os.makedirs(os.path.join(ROOT, "backend", "uploads"), exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=os.path.join(ROOT, "backend", "uploads")), name="uploads")
 
