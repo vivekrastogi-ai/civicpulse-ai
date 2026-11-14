@@ -747,7 +747,22 @@ def reminder_check(cell_id: int, date: str, time_hhmm: str = "10:00"):
 def _start_notifier():
     import notifier
     notifier.start(lambda cid, d, t: reminder_check(cid, d, t))
+import threading
 
+
+def _warm():
+    try:
+        get_model()
+        get_table()
+        get_live_daily(rain_points())
+        print("Warm-up done")
+    except Exception as e:
+        print("Warm-up failed:", e)
+
+
+@app.on_event("startup")
+def _warmup():
+    threading.Thread(target=_warm, daemon=True).start()
 
 # ---------------- Premium Lab ----------------
 def _gate(user, demo: bool) -> bool:
