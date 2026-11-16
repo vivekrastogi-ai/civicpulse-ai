@@ -43,25 +43,62 @@ def _fetch_point(lat, lon):
     return d
 
 
+FORECAST = "https://api.open-meteo.com/v1/forecast"
+
+
+def _daily_from_hourly(h, lat, lon):
+    h = pd.DataFrame(h)
+    h["time"] = pd.to_datetime(h["time"])
+    h["date"] = h["time"].dt.normalize()
+    dd = h.groupby("date").agg(
+        rain_mm=("precipitation", "sum"),
+        rain_max_1h=("precipitation", "max"),
+        temp_mean=("temperature_2m", "mean"),
+        humidity_mean=("relative_humidity_2m", "mean"),
+        wind_mean=("wind_speed_10m", "mean"),
+    ).reset_index().sort_values("date")
+    g = dd["rain_mm"]
+    dd["rain_prev1d"] = g.shift(1).fillna(0)
+    dd["rain_prev3d"] = g.shift(1).rolling(3, min_periods=1).sum().fillna(0)
+    dd["rain_prev7d"] = g.shift(1).rolling(7, min_periods=1).sum().fillna(0)
+    dd["rain_prev30d"] = g.shift(1).rolling(30, min_periods=1).sum().fillna(0)
+    dd["rain_lat"], dd["rain_lon"] = round(lat, 1), round(lon, 1)
+    return dd
+
+
 def get_live_daily(points):
-    """points: [(lat, lon), ...] -> DataFrame of daily features (30 min cache)."""
-    now = time.time()
-    if _CACHE["daily"] is not None and now - _CACHE["t"] < TTL:
-        return _CACHE["daily"]
+    """Fetch forecast for all points in small batches (few requests, gentle on rate limits)."""
     frames = []
-    for lat, lon in points:
-        try:
-            frames.append(_fetch_point(lat, lon))
-        except Exception as e:
-            print("Live point fail:", lat, lon, e)
-        time.sleep(1)
+    batch = 7
+    for i in range(0, len(points), batch):
+        chunk = points[i:i + batch]
+        params = {
+            "latitude": ",".join(str(p[0]) for p in chunk),
+            "longitude": ",".join(str(p[1]) for p in chunk),
+            "hourly": "precipitation,temperature_2m,relative_humidity_2m,wind_speed_10m",
+            "past_days": 31, "forecast_days": 16,
+            "timezone": "Asia/Kolkata",
+        }
+        data = None
+        for attempt in range(4):
+            try:
+                r = requests.get(FORECAST, params=params, timeout=60)
+                j = r.json()
+                if r.status_code == 200 and (isinstance(j, list) or "hourly" in j):
+                    data = j if isinstance(j, list) else [j]
+                    break
+                print("Open-Meteo said:", r.status_code, str(j)[:200])
+            except Exception as e:
+                print("Open-Meteo request error:", e)
+            time.sleep(8 * (attempt + 1))
+        if data is None:
+            continue
+        for (lat, lon), item in zip(chunk, data):
+            frames.append(_daily_from_hourly(item["hourly"], lat, lon))
+        time.sleep(3)
     if not frames:
-        if _CACHE["daily"] is not None:
-            return _CACHE["daily"]  # purana data, kuch na kuch
-        raise RuntimeError("Koi bhi live point nahi mila")
-    daily = pd.concat(frames, ignore_index=True)
-    _CACHE["daily"], _CACHE["t"] = daily, now
-    return daily
+        raise RuntimeError("Open-Meteo returned no data for any point")
+    return pd.concat(frames, ignore_index=True)
 
 
 def live_range():
