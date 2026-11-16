@@ -100,6 +100,47 @@ def rain_points() -> list:
     return [(float(a), float(c)) for a, c in b.values]
 
 
+LIVE_FILE = os.path.join(ROOT, "backend", "cache", "live_daily.parquet")
+_live = {"df": None, "ts": 0.0, "busy": False}
+_live_lock = threading.Lock()
+
+
+def _refresh_live():
+    with _live_lock:
+        if _live["busy"]:
+            return
+        _live["busy"] = True
+    try:
+        df = get_live_daily(rain_points())
+        if df is not None and len(df):
+            _live["df"], _live["ts"] = df, time.time()
+            os.makedirs(os.path.dirname(LIVE_FILE), exist_ok=True)
+            df.to_parquet(LIVE_FILE)
+            print("Live weather refreshed")
+    except Exception as e:
+        print("Live refresh failed:", e)
+    finally:
+        _live["busy"] = False
+
+
+def _load_live_disk():
+    if os.path.exists(LIVE_FILE) and time.time() - os.path.getmtime(LIVE_FILE) < 12 * 3600:
+        try:
+            _live["df"] = pd.read_parquet(LIVE_FILE)
+            _live["ts"] = os.path.getmtime(LIVE_FILE)
+        except Exception as e:
+            print("Live disk load failed:", e)
+
+
+def live_daily_cached():
+    if _live["df"] is None:
+        _load_live_disk()
+    if _live["df"] is None or time.time() - _live["ts"] > 1800:
+        threading.Thread(target=_refresh_live, daemon=True).start()
+    if _live["df"] is None:
+        raise HTTPException(503, "Live weather is warming up. Please retry in 30 seconds.")
+    return _live["df"]
+
 _ARCHIVE_CACHE = {}
 
 
@@ -115,7 +156,7 @@ def day_frame(date: str):
         raise HTTPException(404, "Forecast is available only up to 15 days ahead.")
     try:
         if ts >= today - timedelta(days=2):
-            daily = get_live_daily(rain_points())
+            daily = live_daily_cached()
             d = daily[daily["date"] == ts]
             mode = "forecast"
         else:
@@ -124,6 +165,9 @@ def day_frame(date: str):
                 _ARCHIVE_CACHE[date] = fetch_archive_day(rain_points(), date)
             d = _ARCHIVE_CACHE[date]
             mode = "observed_live"
+
+    except HTTPException:
+        raise
     except Exception as e:
         print("Weather error:", e)
         raise HTTPException(503, "Weather data is unavailable right now. Please try again shortly.")
@@ -748,6 +792,22 @@ def _start_notifier():
     import notifier
     notifier.start(lambda cid, d, t: reminder_check(cid, d, t))
 import threading
+
+
+def _warm_loop():
+    try:
+        get_model()
+        get_table()
+    except Exception as e:
+        print("Warm-up failed:", e)
+    while True:
+        _refresh_live()
+        time.sleep(1200)
+
+
+@app.on_event("startup")
+def _warmup():
+    threading.Thread(target=_warm_loop, daemon=True).start()
 
 
 def _warm():
