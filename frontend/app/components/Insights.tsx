@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { API } from "../lib/api";
+import { makeRiskCard } from "./shareCard";
 
 type Res = {
   score: number;
@@ -35,15 +36,19 @@ export default function Insights({
       .catch(() => setR(null));
   }, [cellId]);
 
-  const share = async () => {
-    const text =
-      `CivicPulse AI | ${placeName}\n${date}: paani bharne ka risk ${riskPct} (${level}).\n` +
-      `Resilience score: ${r?.score ?? "-"}/100\n(Model ka estimate, emergency alert nahi.)`;
+    const share = async () => {
     try {
-      if (navigator.share) await navigator.share({ title: "CivicPulse AI", text });
-      else {
-        await navigator.clipboard.writeText(text);
-        setMsg("Copy ho gaya, ab kahin bhi paste karo.");
+      const blob = await makeRiskCard({ place: placeName, date, riskPct, level, score: r?.score ?? null });
+      const file = new File([blob], "civicpulse-risk.png", { type: "image/png" });
+      const text = `${placeName}: ${riskPct} (${level}) on ${date}. CivicPulse AI`;
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], text, title: "CivicPulse AI" });
+      } else {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "civicpulse-risk.png";
+        a.click();
+        setMsg("Card download ho gaya, ab kahin bhi share karo.");
       }
     } catch {
       setMsg("Share nahi hua.");
@@ -102,7 +107,7 @@ export default function Insights({
         onClick={share}
         className="w-full rounded-2xl border border-emerald-400/30 bg-emerald-400/10 py-2.5 text-sm font-semibold text-emerald-300 hover:bg-emerald-400/20"
       >
-        📤 Is jagah ka risk card share karo
+        📤 Share risk card (image)
       </button>
       {msg && <div className="text-xs text-emerald-200">{msg}</div>}
     </>
