@@ -15,6 +15,7 @@ import FloodScore from "./components/FloodScore";
 import Insights from "./components/Insights";
 import type { Cell, Focus } from "./components/RiskMap";
 import { API, api, authHeaders, clearSession, getUser, setSession, type User } from "./lib/api";
+import VoiceButton, { speak } from "./components/VoiceButton";
 
 
 const RiskMap = dynamic(() => import("./components/RiskMap"), { ssr: false });
@@ -416,8 +417,8 @@ export default function Home() {
     setSelected(a.cell_id);
   };
 
-  const ask = () => {
-    const q = question.trim();
+    const ask = (override?: string, spoken = false) => {
+    const q = (override ?? question).trim();
     if (!q || selected === null || asking) return;
     setChat((c) => [...c, { role: "user", text: q }]);
     setQuestion("");
@@ -428,7 +429,10 @@ export default function Home() {
       body: JSON.stringify({ cell_id: selected, date, question: q, place_name: placeName || null }),
     })
       .then((r) => r.json())
-      .then((d) => setChat((c) => [...c, { role: "bot", text: d.answer, source: d.source }]))
+      .then((d) => {
+        setChat((c) => [...c, { role: "bot", text: d.answer, source: d.source }]);
+        if (spoken && d.answer) speak(String(d.answer).slice(0, 400));
+      })
       .catch(() => setChat((c) => [...c, { role: "bot", text: "No response from the server." }]))
       .finally(() => setAsking(false));
   };
@@ -803,7 +807,7 @@ export default function Home() {
                   ))}
                   {asking && <p className="text-xs text-slate-400">Thinking...</p>}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                   <input
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
@@ -811,7 +815,8 @@ export default function Home() {
                     placeholder="Ask your question..."
                     className="min-w-0 flex-1 rounded-lg bg-white/10 px-2 py-1.5 text-slate-100 placeholder-slate-500 outline-none"
                   />
-                  <button onClick={ask} disabled={asking} className="rounded-lg bg-fuchsia-500 px-3 py-1.5 font-semibold text-white disabled:opacity-50">
+                  <VoiceButton onText={(t) => ask(t, true)} />
+                  <button onClick={() => ask()} disabled={asking} className="rounded-lg bg-fuchsia-500 px-3 py-1.5 font-semibold text-white disabled:opacity-50">
                     Ask
                   </button>
                 </div>
