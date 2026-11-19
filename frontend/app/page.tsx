@@ -15,7 +15,7 @@ import FloodScore from "./components/FloodScore";
 import Insights from "./components/Insights";
 import type { Cell, Focus } from "./components/RiskMap";
 import { API, api, authHeaders, clearSession, getUser, setSession, type User } from "./lib/api";
-import VoiceButton, { speak } from "./components/VoiceButton";
+import VoiceButton from "./components/VoiceButton";
 
 
 const RiskMap = dynamic(() => import("./components/RiskMap"), { ssr: false });
